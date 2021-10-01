@@ -53,7 +53,7 @@
   "bbox_bottom": 14,
   "HTile": false,
   "VTile": false,
-  "For3D": false,
+  "For3D": true,
   "width": 16,
   "height": 16,
   "swatchColours": null,

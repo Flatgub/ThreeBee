@@ -4,7 +4,7 @@
     "path": "texturegroups/Default",
   },
   "sequence": {
-    "spriteId": {"name":"sprAudioSource","path":"sprites/sprAudioSource/sprAudioSource.yy",},
+    "spriteId": {"name":"sprPistolTex","path":"sprites/sprPistolTex/sprPistolTex.yy",},
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -16,7 +16,7 @@
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"3aa5409c-fc96-41b8-a25d-c759aa2a47a7","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"7b40fa22-2511-4dd8-8027-14a42a09fc03","path":"sprites/sprAudioSource/sprAudioSource.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"eb384f29-d123-464f-ac1d-67fc932fd0ea","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"67ddbdfa-0684-4017-b080-5356abd18b91","path":"sprites/sprPistolTex/sprPistolTex.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
@@ -33,9 +33,9 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprAudioSource","path":"sprites/sprAudioSource/sprAudioSource.yy",},
+    "parent": {"name":"sprPistolTex","path":"sprites/sprPistolTex/sprPistolTex.yy",},
     "resourceVersion": "1.3",
-    "name": "sprAudioSource",
+    "name": "sprPistolTex",
     "tags": [],
     "resourceType": "GMSequence",
   },
@@ -48,9 +48,9 @@
   "collisionTolerance": 0,
   "swfPrecision": 2.525,
   "bbox_left": 0,
-  "bbox_right": 14,
-  "bbox_top": 1,
-  "bbox_bottom": 14,
+  "bbox_right": 15,
+  "bbox_top": 0,
+  "bbox_bottom": 15,
   "HTile": false,
   "VTile": false,
   "For3D": true,
@@ -60,20 +60,20 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"7b40fa22-2511-4dd8-8027-14a42a09fc03","path":"sprites/sprAudioSource/sprAudioSource.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"7b40fa22-2511-4dd8-8027-14a42a09fc03","path":"sprites/sprAudioSource/sprAudioSource.yy",},"LayerId":{"name":"c3fe69e4-0762-4c05-b179-8d69d575b932","path":"sprites/sprAudioSource/sprAudioSource.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprAudioSource","path":"sprites/sprAudioSource/sprAudioSource.yy",},"resourceVersion":"1.0","name":"7b40fa22-2511-4dd8-8027-14a42a09fc03","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"67ddbdfa-0684-4017-b080-5356abd18b91","path":"sprites/sprPistolTex/sprPistolTex.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"67ddbdfa-0684-4017-b080-5356abd18b91","path":"sprites/sprPistolTex/sprPistolTex.yy",},"LayerId":{"name":"9942aecc-9650-4687-8f3d-c8a67f1658b9","path":"sprites/sprPistolTex/sprPistolTex.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sprPistolTex","path":"sprites/sprPistolTex/sprPistolTex.yy",},"resourceVersion":"1.0","name":"67ddbdfa-0684-4017-b080-5356abd18b91","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"c3fe69e4-0762-4c05-b179-8d69d575b932","tags":[],"resourceType":"GMImageLayer",},
+    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"9942aecc-9650-4687-8f3d-c8a67f1658b9","tags":[],"resourceType":"GMImageLayer",},
   ],
   "nineSlice": null,
   "parent": {
-    "name": "Resources",
-    "path": "folders/ThreeBee/Resources.yy",
+    "name": "Sprites",
+    "path": "folders/Sprites.yy",
   },
   "resourceVersion": "1.0",
-  "name": "sprAudioSource",
+  "name": "sprPistolTex",
   "tags": [],
   "resourceType": "GMSprite",
 }

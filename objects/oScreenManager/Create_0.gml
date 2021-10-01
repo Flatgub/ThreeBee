@@ -44,3 +44,7 @@ global.OBJA_IMPORT_VERBOSE = false;
 
 rendcomp = new RenderComponent(id, false, false)
 rendcomp.renderTexture = sprite_get_texture(texWhite,0)
+
+global.AMBIENT_LIGHT_COLOUR = [0.25, 0.25, 0.25]
+
+create_light(16,16,16,c_white,500)
