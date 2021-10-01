@@ -35,7 +35,6 @@ global.LISTENER_CAMERA = undefined;
 
 
 // ### LIGHTING & FOG ###
-get_uniform_handles();
 global.ALL_LIGHTS = ds_list_create();
 global.AMBIENT_LIGHT_COLOUR = [0.01,0.01,0.01];
 
@@ -52,7 +51,7 @@ global.BAKED_MODELS = ds_map_create();
 
 global.DEFAULT_MODEL = -1;//model_to_vbuffer("cube");
 //vertex_freeze(global.DEFAULT_MODEL);
-global.DEFAULT_TEXTURE = sprite_get_texture(sprDefaultTexture,0);
+global.DEFAULT_TEXTURE = sprite_get_texture(texMissing,0);
 global.DEFAULT_MATRIX = matrix_build_identity();
 
 //model_load_obj("models/mdl_cube.obj","mdl_cube");
