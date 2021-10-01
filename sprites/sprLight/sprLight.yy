@@ -4,7 +4,7 @@
     "path": "texturegroups/Default",
   },
   "sequence": {
-    "spriteId": {"name":"texMissing","path":"sprites/texMissing/texMissing.yy",},
+    "spriteId": {"name":"sprLight","path":"sprites/sprLight/sprLight.yy",},
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -16,7 +16,7 @@
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"ab9256c3-ec99-4134-87c8-94b12cd4f553","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"a48a439a-0a77-4d94-98c0-baf1d3e43814","path":"sprites/texMissing/texMissing.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"b7a430c4-16e0-41f2-916f-4786f3bd1427","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"4ad29b42-ac8a-439f-be6e-58c11513c30b","path":"sprites/sprLight/sprLight.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
@@ -33,9 +33,9 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"texMissing","path":"sprites/texMissing/texMissing.yy",},
+    "parent": {"name":"sprLight","path":"sprites/sprLight/sprLight.yy",},
     "resourceVersion": "1.3",
-    "name": "texMissing",
+    "name": "sprLight",
     "tags": [],
     "resourceType": "GMSequence",
   },
@@ -50,22 +50,22 @@
   "bbox_left": 0,
   "bbox_right": 15,
   "bbox_top": 0,
-  "bbox_bottom": 15,
+  "bbox_bottom": 14,
   "HTile": false,
   "VTile": false,
-  "For3D": true,
+  "For3D": false,
   "width": 16,
   "height": 16,
   "swatchColours": null,
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"a48a439a-0a77-4d94-98c0-baf1d3e43814","path":"sprites/texMissing/texMissing.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"a48a439a-0a77-4d94-98c0-baf1d3e43814","path":"sprites/texMissing/texMissing.yy",},"LayerId":{"name":"d36df130-3042-4893-ae45-ce21a05f4b4b","path":"sprites/texMissing/texMissing.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"texMissing","path":"sprites/texMissing/texMissing.yy",},"resourceVersion":"1.0","name":"a48a439a-0a77-4d94-98c0-baf1d3e43814","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"4ad29b42-ac8a-439f-be6e-58c11513c30b","path":"sprites/sprLight/sprLight.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"4ad29b42-ac8a-439f-be6e-58c11513c30b","path":"sprites/sprLight/sprLight.yy",},"LayerId":{"name":"ae37ba41-ae46-492e-bfe7-77fa2de3da7b","path":"sprites/sprLight/sprLight.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sprLight","path":"sprites/sprLight/sprLight.yy",},"resourceVersion":"1.0","name":"4ad29b42-ac8a-439f-be6e-58c11513c30b","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"d36df130-3042-4893-ae45-ce21a05f4b4b","tags":[],"resourceType":"GMImageLayer",},
+    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"ae37ba41-ae46-492e-bfe7-77fa2de3da7b","tags":[],"resourceType":"GMImageLayer",},
   ],
   "nineSlice": null,
   "parent": {
@@ -73,7 +73,7 @@
     "path": "folders/ThreeBee/Resources.yy",
   },
   "resourceVersion": "1.0",
-  "name": "texMissing",
+  "name": "sprLight",
   "tags": [],
   "resourceType": "GMSprite",
 }

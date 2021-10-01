@@ -1,7 +1,10 @@
 {
-  "spriteId": null,
+  "spriteId": {
+    "name": "sprLight",
+    "path": "sprites/sprLight/sprLight.yy",
+  },
   "solid": false,
-  "visible": true,
+  "visible": false,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": null,

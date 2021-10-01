@@ -1,4 +1,4 @@
 /// @description oRenderer Draw
 
-//TODO: render_scene goes here
+render_scene();
 

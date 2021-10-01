@@ -4,7 +4,7 @@
     "path": "texturegroups/Default",
   },
   "sequence": {
-    "spriteId": {"name":"texMissing","path":"sprites/texMissing/texMissing.yy",},
+    "spriteId": {"name":"sprCamera","path":"sprites/sprCamera/sprCamera.yy",},
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -16,7 +16,7 @@
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"ab9256c3-ec99-4134-87c8-94b12cd4f553","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"a48a439a-0a77-4d94-98c0-baf1d3e43814","path":"sprites/texMissing/texMissing.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"5b0d8c66-e1c4-4345-ab24-e1defd16b574","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"58c14a12-6c13-4d06-9331-83c7a9d8cd56","path":"sprites/sprCamera/sprCamera.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
@@ -33,9 +33,9 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"texMissing","path":"sprites/texMissing/texMissing.yy",},
+    "parent": {"name":"sprCamera","path":"sprites/sprCamera/sprCamera.yy",},
     "resourceVersion": "1.3",
-    "name": "texMissing",
+    "name": "sprCamera",
     "tags": [],
     "resourceType": "GMSequence",
   },
@@ -48,24 +48,24 @@
   "collisionTolerance": 0,
   "swfPrecision": 2.525,
   "bbox_left": 0,
-  "bbox_right": 15,
-  "bbox_top": 0,
-  "bbox_bottom": 15,
+  "bbox_right": 14,
+  "bbox_top": 3,
+  "bbox_bottom": 11,
   "HTile": false,
   "VTile": false,
-  "For3D": true,
+  "For3D": false,
   "width": 16,
   "height": 16,
   "swatchColours": null,
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"a48a439a-0a77-4d94-98c0-baf1d3e43814","path":"sprites/texMissing/texMissing.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"a48a439a-0a77-4d94-98c0-baf1d3e43814","path":"sprites/texMissing/texMissing.yy",},"LayerId":{"name":"d36df130-3042-4893-ae45-ce21a05f4b4b","path":"sprites/texMissing/texMissing.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"texMissing","path":"sprites/texMissing/texMissing.yy",},"resourceVersion":"1.0","name":"a48a439a-0a77-4d94-98c0-baf1d3e43814","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"58c14a12-6c13-4d06-9331-83c7a9d8cd56","path":"sprites/sprCamera/sprCamera.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"58c14a12-6c13-4d06-9331-83c7a9d8cd56","path":"sprites/sprCamera/sprCamera.yy",},"LayerId":{"name":"6e064a6c-0d58-49b8-9f6f-2b1d3ac8b30f","path":"sprites/sprCamera/sprCamera.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sprCamera","path":"sprites/sprCamera/sprCamera.yy",},"resourceVersion":"1.0","name":"58c14a12-6c13-4d06-9331-83c7a9d8cd56","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"d36df130-3042-4893-ae45-ce21a05f4b4b","tags":[],"resourceType":"GMImageLayer",},
+    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"6e064a6c-0d58-49b8-9f6f-2b1d3ac8b30f","tags":[],"resourceType":"GMImageLayer",},
   ],
   "nineSlice": null,
   "parent": {
@@ -73,7 +73,7 @@
     "path": "folders/ThreeBee/Resources.yy",
   },
   "resourceVersion": "1.0",
-  "name": "texMissing",
+  "name": "sprCamera",
   "tags": [],
   "resourceType": "GMSprite",
 }

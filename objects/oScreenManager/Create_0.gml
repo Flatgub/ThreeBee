@@ -18,11 +18,12 @@ global.SCREEN_HEIGHT = round(h/3);
 global.VIEWPORT_WIDTH = global.WINDOW_WIDTH;
 global.VIEWPORT_HEIGHT = global.WINDOW_HEIGHT;
 
+instance_create_depth(0,0,-10000,oDevConsole);
 
 instance_create_layer(0,0,"Instances",oRenderer);
 //instance_create_layer(0,0,"Instances",oCollisionManager);
 
-instance_create_depth(0,0,-10000,oDevConsole);
+
 
 //surface_resize(application_surface,global.SCREEN_WIDTH,global.SCREEN_HEIGHT)
 
@@ -40,3 +41,6 @@ global.SCREEN_CENTER_Y = global.WINDOW_HEIGHT/2;
 // window_set_cursor(global.MOUSELOCK ? cr_none : cr_default);
 
 global.OBJA_IMPORT_VERBOSE = false;
+
+rendcomp = new RenderComponent(id, false, false)
+rendcomp.renderTexture = sprite_get_texture(texWhite,0)

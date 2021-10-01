@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Rendering",
-    "path": "folders/ThreeBee/Core/Rendering.yy",
+    "name": "Core",
+    "path": "folders/ThreeBee/Core.yy",
   },
   "resourceVersion": "1.0",
-  "name": "tb_rendercomponent",
+  "name": "tb_utility",
   "tags": [],
   "resourceType": "GMScript",
 }

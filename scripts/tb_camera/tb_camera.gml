@@ -165,7 +165,7 @@ function camera_look_at(camera, _x, _y, _z) {
 	camera.pitch = clamp(angle_difference(0,point_direction(0,0,dist,tz-camera.z)),-89.9,89.9);
 }
 
-/// @functino camera_turn_by(camera, yaw, pitch)
+/// @function camera_turn_by(camera, yaw, pitch)
 /// @param camera
 /// @param yaw
 /// @param pitch

@@ -48,11 +48,17 @@ global.LOADED_MODELS = ds_map_create();
 global.BAKED_MODELS = ds_map_create();
 
 //model_load_raw("models/mdl_unknown.mdl","mdl_unknown");
-
-global.DEFAULT_MODEL = -1;//model_to_vbuffer("cube");
+//model_to_vbuffer("cube");
 //vertex_freeze(global.DEFAULT_MODEL);
+
+
 global.DEFAULT_TEXTURE = sprite_get_texture(texMissing,0);
 global.DEFAULT_MATRIX = matrix_build_identity();
+
+defaultmodel = model_load_obj("suzanne.obj")
+defaultmodel.bake();
+
+global.DEFAULT_MODEL = defaultmodel.vertexBuffer;
 
 //model_load_obj("models/mdl_cube.obj","mdl_cube");
 
