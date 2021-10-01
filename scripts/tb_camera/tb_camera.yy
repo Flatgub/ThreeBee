@@ -6,7 +6,7 @@
     "path": "folders/ThreeBee/Gizmos/Cameras.yy",
   },
   "resourceVersion": "1.0",
-  "name": "lib_camera",
+  "name": "tb_camera",
   "tags": [],
   "resourceType": "GMScript",
 }
