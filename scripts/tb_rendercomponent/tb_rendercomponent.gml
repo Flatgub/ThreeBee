@@ -26,7 +26,7 @@ function RenderComponent(_parent,_static, _transparent) constructor{
 	alpha = 1;
 	z = 0;
 	ignoreDepth = false;
-	ignoreFlags = false;
+	renderLayers = false;
 	
 	/// @function update()
 	/// @description transparent objects need to be depth sorted, so this calculates approximate depth

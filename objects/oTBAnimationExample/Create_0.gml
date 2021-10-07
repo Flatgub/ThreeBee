@@ -96,7 +96,7 @@ dev_register_command("set_anim", function(args) {
 		armInst.set_animation(animname, loop);
 		}
 	else {
-		debug_log("armature does not contain animation " + animname, CONSOLE_ERROR_COL);
+		logger_error("armature does not contain animation " + animname, CONSOLE_ERROR_COL);
 		}
 	}, 2, "sets the animation", "<name> <loop>");
 

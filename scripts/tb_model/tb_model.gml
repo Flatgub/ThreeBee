@@ -12,11 +12,13 @@ function Model() constructor {
 	//				 the vertex buffer entirely. To save memory, the modelbuffer is discarded after baking
 	bake = function() {
 		if(baked) {
-			debug_log("tried to bake " + name + " but model is already baked");
+			logger_warn("tried to bake " + name + " but model is already baked",true);
 			return;
 			}
 			
-		if(modelBuffer == undefined) {throw "Tried to bake nonexistent model"}
+		if(modelBuffer == undefined) {
+			logger_error("Tried to bake nonexistent model", true)
+			}
 		
 
 		vertexBuffer = vertex_create_buffer_from_buffer(modelBuffer,global.VERTEX_FORMAT);
@@ -33,7 +35,7 @@ function Model() constructor {
 	//				 where the sprite exists on the texture page, so that all models can be rendered
 	//				 using the same page. note that this process can't be undone.
 	bind_to_texture = function(_sprite) {
-		if(baked) {debug_alert("tried to fit " + name + " to texture, but model is already baked",c_yellow);return;}
+		if(baked) {logger_warn("tried to fit " + name + " to texture, but model is already baked",true);return;}
 		
 		var noSub = true;
 		var subimage = 0;
@@ -212,7 +214,7 @@ function model_load_obj(path) {
 		
 		//early abort for double loaded models
 		if(ds_map_exists(global.LOADED_MODELS,modelname)) {
-			debug_alert("Attempted to load model '" + modelname + "' which is already loaded",c_red);
+			logger_warn("Attempted to load model '" + modelname + "' which is already loaded, skipping");
 			continue;
 			}	
 		

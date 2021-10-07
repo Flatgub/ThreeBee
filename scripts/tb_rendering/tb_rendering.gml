@@ -1,3 +1,18 @@
+//returns true if the component should be render
+function __compare_layers(_component, _camera) {
+	switch(_camera.renderLayerMode) {
+		case TB_RenderLayerModes.Ignore: {return true;};break;
+		//if any flags match, skip
+		case TB_RenderLayerModes.ExcludeLayers: {
+			return (_component.renderLayers & _camera.renderLayers == 0)
+			};break;
+		//if no flags match, skip
+		case TB_RenderLayerModes.ExludeOthers: {
+			return (_component.renderLayers & _camera.renderLayers != 0)	
+			};break;
+		}
+	}
+
 function render_scene() {
 
 	var transparent = ds_priority_create();
@@ -6,6 +21,9 @@ function render_scene() {
 	global.CURRENT_CAMERA = ds_map_find_value(global.VIEW_CAMERA_MAP,view_current);
 	
 	camera_ready(global.CURRENT_CAMERA);
+	
+	//clear the surface is necessary
+	if(global.CURRENT_CAMERA.targetSurfaceNoBG) {draw_clear_alpha(c_black, 0);}
 
 	//activate the provided shader if the camera has one
 	var cameraShader = global.CURRENT_CAMERA.cameraShader;
@@ -22,19 +40,19 @@ function render_scene() {
 		
 		if(rendComp.dontRender) {continue;}
 		
+		//delay ignoreDepth components till later
 		if(rendComp.ignoreDepth) {
 			ds_list_add(depthignore,rendComp);
 			continue;
 			}
-		
-		//reject objects that match an ignore flag with the camera
-		if(global.CURRENT_CAMERA.ignoreFlags & rendComp.ignoreFlags != 0) {continue;}	
+				
+		//reject objects that don't align with the camera's layer settings
+		if(!__compare_layers(rendComp, global.CURRENT_CAMERA)) {continue;}
 		
 		// UPDATE THE SHADER
-		
 		var currentShader = cameraShader;
 		//component shader overrides camera shader
-		if(rendComp.customShader != undefined) {currentShader = rendComp.customShader;}
+		if(rendComp.customShader != undefined && !global.CURRENT_CAMERA.cameraShaderMandatory) {currentShader = rendComp.customShader;}
 			
 		//allow disabling the shader
 		if(currentShader == NO_SHADER) {shader_reset();}
@@ -70,8 +88,8 @@ function render_scene() {
 			continue;
 			}
 	
-		//reject objects that match an ignore flag with the camera
-		if(global.CURRENT_CAMERA.ignoreFlags & rendComp.ignoreFlags != 0) {continue;}
+		//reject objects that don't align with the camera's layer settings
+		if(!__compare_layers(rendComp, global.CURRENT_CAMERA)) {continue;}
 	
 		//dont render transparent things in this pass
 		if rendComp.isTransparent {
@@ -83,7 +101,7 @@ function render_scene() {
 		
 		var currentShader = cameraShader;
 		//component shader overrides camera shader
-		if(rendComp.customShader != undefined) {currentShader = rendComp.customShader;}
+		if(rendComp.customShader != undefined && !global.CURRENT_CAMERA.cameraShaderMandatory) {currentShader = rendComp.customShader;}
 			
 		//allow disabling the shader
 		if(currentShader == NO_SHADER) {shader_reset();}
@@ -120,6 +138,9 @@ function render_scene() {
 		var rendComp = ds_priority_delete_max(transparent);
 		
 		//ds_list_add(depthlist,rendComp,rendComp.renderDepth);
+		
+		//reject objects that don't align with the camera's layer settings
+		if(!__compare_layers(rendComp, global.CURRENT_CAMERA)) {continue;}
 		
 		// UPDATE THE SHADER
 		
@@ -161,6 +182,9 @@ function render_scene() {
 		var rendComp = depthignore[| i];
 		
 		// UPDATE THE SHADER
+		
+		//reject objects that don't align with the camera's layer settings
+		if(!__compare_layers(rendComp, global.CURRENT_CAMERA)) {continue;}
 		
 		var currentShader = cameraShader;
 		//component shader overrides camera shader

@@ -27,10 +27,13 @@ activeLightStrengths = [];
 lightingEnabled = false;
 
 cameraShader = undefined;
+cameraShaderMandatory = false;
 
 targetSurface = undefined;
+targetSurfaceNoBG = false;
 
-ignoreFlags = 0;
+renderLayerMode = TB_RenderLayerModes.Ignore;
+renderLayers = 0;
 
 cameraMatrix = matrix_build_identity();
 projectionMatrix = matrix_build_identity();

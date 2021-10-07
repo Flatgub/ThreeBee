@@ -41,9 +41,9 @@ function debug_alert(_message) {
 	var col = argument_count > 1 ? argument[1] : undefined;
 	if is_undefined(col) {col = CONSOLE_GENERIC_COL;}
 	
-	debug_log(_message,col);
-	if(DEBUG_ENABLED) {global.CONSOLE_OPEN = true;}
+	ds_list_add(global.__console_lines, {text : _message, colour : col});
 	
+	if(DEBUG_ENABLED) {global.CONSOLE_OPEN = true;}
 	}
 
 /// @function dev_get_autocomplete(filter, [startswith])

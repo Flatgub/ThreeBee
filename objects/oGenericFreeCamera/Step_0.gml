@@ -43,7 +43,7 @@ var targetX = 0
 var targetY = 0
 var targetZ = 0
 
-if !global.CONSOLE_OPEN {
+if (!global.CONSOLE_OPEN && mouseLock) {
 	if keyboard_check(vk_space) {targetZ = maxVerticalSpeed;}
 	if keyboard_check(vk_shift) {targetZ = -maxVerticalSpeed;}
 

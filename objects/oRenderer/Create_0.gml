@@ -25,6 +25,9 @@ depthlist = ds_list_create();
 global.DEFAULT_BASIC_SHADER = new BasicShader();
 
 // ### CAMERAS ###
+
+audio_falloff_set_model(audio_falloff_linear_distance)
+
 view_enabled=true;
 global.CAMERA_LAYER = layer_create(-200); 
 global.ALL_CAMERAS = ds_list_create();

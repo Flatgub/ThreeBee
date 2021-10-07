@@ -60,8 +60,8 @@ function delete_camera(cam) {
 	ds_list_delete(global.ALL_CAMERAS,ds_list_find_index(global.ALL_CAMERAS,cam));
 	ds_map_delete(global.VIEW_CAMERA_MAP,cam.view);
 
-	view_set_visible(view,false);
-	view_set_camera(view,-1);
+	view_set_visible(cam.view,false);
+	view_set_camera(cam.view,-1);
 	camera_destroy(cam.gmCamera);
 	
 	cam._dead = true;
@@ -74,7 +74,7 @@ function delete_camera(cam) {
 function camera_enabled(cam,enabled) {
 	cam.enabled = enabled;
 	view_set_visible(cam.view,enabled)
-	camera_use_surface(cam,cam.targetSurface != undefined);
+	camera_use_surface(cam,(cam.targetSurface != undefined));
 	}
 	
 /// @function camera_use_surface(camera,boolean)
@@ -296,7 +296,7 @@ function update_camera() {
 		var upVecZ = lengthdir_y(32,-(cam.pitch-90))
 	
 		audio_listener_set_position(0,cam.x,cam.y,cam.z)
-		audio_listener_set_orientation(0,lookPosX-camX,lookPosY-camY,lookPosZ-camZ,upVecX,upVecY,upVecZ);
+		audio_listener_set_orientation(0,lookPosX-camX,lookPosY-camY,lookPosZ-camZ,upVecX,upVecY,-upVecZ);
 		
 		}
 }
