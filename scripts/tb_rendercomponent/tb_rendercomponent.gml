@@ -17,13 +17,14 @@ function RenderComponent(_parent,_static, _transparent) constructor{
 	renderMode = pr_trianglelist;
 	renderTexture = global.DEFAULT_TEXTURE;
 	renderMatrix = global.DEFAULT_MATRIX;
-	renderBuffer = global.DEFAULT_MODEL;
+	renderBuffer = global.DEFAULT_VERTEX_BUFFER;
 	customShader = undefined;
 	customRenderFunction = undefined;
 
 	dontRender = false;
 	colour = c_white;
 	alpha = 1;
+	lightMix = 1;
 	z = 0;
 	ignoreDepth = false;
 	renderLayers = false;
@@ -41,5 +42,14 @@ function RenderComponent(_parent,_static, _transparent) constructor{
 	static cleanup = function() {
 		if isStatic {ds_list_delete(global.STATIC_RENDER_REQUESTS,ds_list_find_index(global.STATIC_RENDER_REQUESTS,self));}
 		else {ds_list_delete(global.DYNAMIC_RENDER_REQUESTS,ds_list_find_index(global.DYNAMIC_RENDER_REQUESTS,self));}
+		}
+	}
+	
+function ModelRenderComponent(_parent, _model, _static, _transparent) : RenderComponent(_parent, _static, _transparent) constructor {
+	renderModel = _model;
+	
+	customRenderFunction = function() {
+		if(!isStatic) {matrix_set(matrix_world,renderMatrix);}
+		renderModel.submit(renderMode, renderTexture);
 		}
 	}

@@ -59,9 +59,10 @@ global.DEFAULT_TEXTURE = sprite_get_texture(texMissing,0);
 global.DEFAULT_MATRIX = matrix_build_identity();
 
 defaultmodel = model_load_obj("suzanne.obj")
-defaultmodel.bake();
+defaultmodel.freeze();
 
-global.DEFAULT_MODEL = defaultmodel.vertexBuffer;
+global.DEFAULT_MODEL = defaultmodel;
+global.DEFAULT_VERTEX_BUFFER = defaultmodel.mesh_groups[0].vertexBuffer;
 
 //model_load_obj("models/mdl_cube.obj","mdl_cube");
 

@@ -1,104 +1,87 @@
+#region [ Data Structures ]
 function Model() constructor {
 	name = "undefined";
-	modelBuffer = undefined;
-	vertexBuffer = undefined;
-	baked = false;
+	mesh_groups = [];
+	frozen = false;
 	texture = global.DEFAULT_TEXTURE;
 	textureFrame = 0;
 	
-	/// @function bake()
-	/// @description converts the model's data buffer into a frozen vertex buffer. this makes the model
-	//				 faster to render, but means the model cannot be modified in any way without rewriting
-	//				 the vertex buffer entirely. To save memory, the modelbuffer is discarded after baking
-	bake = function() {
-		if(baked) {
-			logger_warn("tried to bake " + name + " but model is already baked",true);
-			return;
-			}
-			
-		if(modelBuffer == undefined) {
-			logger_error("Tried to bake nonexistent model", true)
-			}
-		
-
-		vertexBuffer = vertex_create_buffer_from_buffer(modelBuffer,global.VERTEX_FORMAT);
-		vertex_freeze(vertexBuffer);
-		 
-		buffer_delete(modelBuffer)
-		baked = true;
-		modelBuffer = undefined;
+	/// @function add_meshgroup(group)
+	function add_meshgroup(_mg) {
+		array_push(mesh_groups, _mg);
 		}
 	
-	/// @function bind_to_texture(sprite, [frame])
-	/// @description sets the texture and textureFrame varables on the model, and then modifies the 
-	//				 modelBuffer so that the UVs of the model (likely 0.0 to 1.0) are adjusted to
-	//				 where the sprite exists on the texture page, so that all models can be rendered
-	//				 using the same page. note that this process can't be undone.
-	bind_to_texture = function(_sprite) {
-		if(baked) {logger_warn("tried to fit " + name + " to texture, but model is already baked",true);return;}
-		
-		var noSub = true;
-		var subimage = 0;
-		
-		if(argument_count == 2) {subimage = argument[1]; noSub = false}
-		
-		texture = sprite_get_texture(_sprite,subimage);
-		textureFrame = subimage;
-
-		var uvs = sprite_get_uvs(_sprite,subimage);
-
-		var uPos = uvs[0];
-		var vPos = uvs[1];
-		var uSize = uvs[2]-uPos;
-		var vSize = uvs[3]-vPos;
-
-		buffer_seek(modelBuffer,buffer_seek_end,0);
-
-		var endSeek = buffer_tell(modelBuffer);
-
-		buffer_seek(modelBuffer,buffer_seek_start,0);
-
-		while(buffer_tell(modelBuffer)!=endSeek) {
-			buffer_seek(modelBuffer,buffer_seek_relative,16); //skip the position data and the colour	
-	
-			//scale uv coordinates
-			var uIn = buffer_read(modelBuffer,buffer_f32);
-			var vIn = buffer_read(modelBuffer,buffer_f32);
-		
-			var uOut = uPos + (uIn * uSize);
-			var vOut = vPos + (vIn * vSize);
-	
-			buffer_seek(modelBuffer,buffer_seek_relative,-8); //go back to before the uv positions so we can rewrite them
-			buffer_write(modelBuffer,buffer_f32,uOut);
-			buffer_write(modelBuffer,buffer_f32,vOut);
-	
-	
-			buffer_seek(modelBuffer,buffer_seek_relative,12); //skip the normal dat
+	/// @function submit(mode, fallback)
+	/// @param	{real}	mode		render mode, like pr_trianglelist
+	/// @param	{real}	fallback	the id of the texture to use for any mesh groups which dont have a texture assigned
+	function submit(mode, fallback_tex) {
+		var groups = mesh_groups;
+		for(var i = 0; i < array_length(groups); i++) {
+			var group = groups[i];
+			var tex = group.texture == undefined ? fallback_tex : group.texture;
+			vertex_submit(group.vertexBuffer, mode, tex);
 			}
-
 		}
-	
-	/// @function clone(new_name)
-	/// @description returns a new deep copy of this model with a new name. Because names are used
-	//				 to identify models, the new name must be unique. Baked models cannot be cloned.
-	clone = function(newName) {
-		if(baked) {throw "Tried to clone " + name + " but the model is baked.";}
-		if(ds_map_exists(global.LOADED_MODELS, newName)) {throw "Tried to clone " + name + " but '" + newName + "' is not a unique identifier";}
 		
-		var newModel = new Model();
-		newModel.name = newName;
-		var newBuffer = buffer_create(buffer_get_size(modelBuffer),buffer_fixed,4);
-		newModel.modelBuffer = newBuffer;
+	function freeze() {
+		if(!frozen) {
+			array_foreach(mesh_groups, function(mg) {mg.freeze()});
+			frozen = true;
+			}
+		}
 		
-		//copy contents across
-		buffer_copy(modelBuffer,0,buffer_get_size(modelBuffer),newBuffer,0);
-		
-		ds_map_add(global.LOADED_MODELS,newName,newModel);
-		return newModel;
+	function cleanup() {
+		array_foreach(mesh_groups, function(mg) {mg.cleanup()});
 		}
 	}
 
 
+function _MeshGroup() constructor {
+	name = "";
+	texturename = "";
+	texture = undefined;		//undefined means use the base texture
+	vertexBuffer = undefined;
+	frozen = false;
+	
+	/// @function bind_texture(name)
+	/// @param	{string}	name	the name of the sprite to bind this meshgroup to
+	function bind_texture(_name) {
+		var spr = asset_get_index(_name);
+		if(spr == -1) {debug_alert("tried to bind to texture " + _name + " that can't be found!",CONSOLE_ERROR_COL); return;}
+		texture = sprite_get_texture(spr, 0)
+		texturename = _name;
+		}
+	
+	/// @function bind_texture_sprite(index)
+	/// @param	{real}	index	the index of the sprite to bind this meshgroup to
+	function bind_texture_sprite(_spr) {
+		texture = sprite_get_texture(_spr, 0)
+		texturename = sprite_get_name(_spr);
+		}
+		
+	/// @function bind_texture_direct(tex)
+	/// @param	{real}	tex		the index of the texture page to bind this meshgroup to
+	function bind_texture_direct(_tex, _name) {
+		texture = _tex;
+		texturename = _name;
+		}
+		
+	/// @function freeze()
+	function freeze() {
+		if(!frozen) {
+			frozen = true;
+			vertex_freeze(vertexBuffer);
+			}
+		}
+	
+	/// @function cleanup()
+	function cleanup() {
+		if(vertexBuffer != undefined) {vertex_delete_buffer(vertexBuffer)}
+		}
+	}
+#endregion
+
+#region [ Loading Models ]
 /// @function model_load_obj(path, [name])
 /// @param path
 /// @param name
@@ -108,6 +91,16 @@ function model_load_obj(path) {
 	var objects = ds_list_create();
 
 	var currentObject = undefined;
+	var currentGroup = undefined;
+	
+	//helper function
+	var newGroup = function(_name) {
+		var group = {};
+		group.name = _name;
+		group.texname = "";
+		group.faces = [];
+		return group;
+		}
 	
 	if !file_exists(path) {show_error(sprintf("Unable to load model at %s, file does not exist",path),true);};
 
@@ -133,11 +126,13 @@ function model_load_obj(path) {
 		
 			// Begin new object block
 			case "o": {
-				//printf("hit o block for %s",line[1]);
-				if(currentObject != undefined) {
-					//printf("- stashed " + currentObject.name);
-					ds_list_add(objects,currentObject);
-					}
+										
+				// vOff, vtOff and vnOff are used to counteract
+				// the fact the id for each element type in the
+				// obj file goes up across all objects in the file
+				// but each object here starts at 0 again
+				// so the Off variable is subtracted from the ids of
+				// each object's relevant indexes
 										
 				currentObject = {}
 				currentObject.name = line[1];
@@ -147,8 +142,15 @@ function model_load_obj(path) {
 				currentObject.vtOff = vtCount;
 				currentObject.normalList = ds_list_create();
 				currentObject.vnOff = vnCount;
-				currentObject.faceList = ds_list_create();
-				//printf("  new datablock has origin %s,%s,%s",vCount,vtCount,vnCount);
+				currentObject.groupList = ds_list_create();
+				currentObject.numGroups = 0;
+				
+				//every object must have at least one meshgroup
+				currentGroup = newGroup("default");
+				ds_list_add(currentObject.groupList, currentGroup);
+				
+				ds_list_add(objects,currentObject);
+				
 				};break;
 		
 			// Vertex line
@@ -176,32 +178,47 @@ function model_load_obj(path) {
 				ds_list_add(currentObject.normalList,[nx,ny,nz]);
 				vnCount++;
 				};break;
+				
+			// face group line
+			case "g": {
+				//the first group should always reappropriate the default group
+				var groupname = line[1];
+				if(currentObject.numGroups == 0) {
+					currentGroup.name = groupname;
+					}
+				else {
+					var group = newGroup(groupname);
+					ds_list_add(currentObject.groupList, group);
+					currentGroup = group;
+					}
+				
+				currentObject.numGroups++;
+				};break;
+				
+			// material select line
+			// note: usemtl is appropriated here to signify a texture name
+			//		 the accompanying .mtl file isn't actually ever used
+			case "usemtl": {
+				currentGroup.texname = line[1];
+				};break;
 			
 			// face tri definition
-			case "f": {
+			case "f": {				
 				var p1 = string_split(line[1],"/");
 				var p2 = string_split(line[2],"/");
 				var p3 = string_split(line[3],"/");
 			
-				ds_list_add(currentObject.faceList,[real(p1[0])-1,real(p1[1])-1,real(p1[2])-1,
-									                real(p3[0])-1,real(p3[1])-1,real(p3[2])-1,
-									                real(p2[0])-1,real(p2[1])-1,real(p2[2])-1]);			
+				var face = [real(p1[0])-1,real(p1[1])-1,real(p1[2])-1,
+							real(p3[0])-1,real(p3[1])-1,real(p3[2])-1,
+							real(p2[0])-1,real(p2[1])-1,real(p2[2])-1];			
+							
+				array_push(currentGroup.faces, face);
 				};break;
 			
 			
 			}
 		}
 	file_text_close(file)
-	
-	//add the last object to the list
-	//printf("stashed " + currentObject.name);
-	
-	ds_list_add(objects,currentObject);
-	currentObject = undefined;
-	
-	//printf("parse complete, parsed %s objects", ds_list_size(objects));
-	
-	//printf("\nbeginning model conversion");
 	
 	var modelOutput = [];
 	
@@ -210,71 +227,81 @@ function model_load_obj(path) {
 		var object = objects[| oi];
 		var modelname = object.name;
 		
-		//printf("converting model '%s'",modelname);
-		
 		//early abort for double loaded models
 		if(ds_map_exists(global.LOADED_MODELS,modelname)) {
-			logger_warn("Attempted to load model '" + modelname + "' which is already loaded, skipping");
+			debug_alert("Attempted to load model '" + modelname + "' which is already loaded",c_red);
 			continue;
 			}	
-		
-		//printf("  model has %s faces", ds_list_size(object.faceList));
-		
-		var size = (12 + 4 + 8 + 12) * 3 * ds_list_size(object.faceList);
-		var modelBuffer = buffer_create(size,buffer_fixed,4);
-		
-		//write vertex data to buffer
-		for(var i = 0; i < ds_list_size(object.faceList); i++) {
-			var f = object.faceList[| i];
-			var o = 0;
-			repeat(3) {
-				var vo = f[o] - object.vOff;
-				var v = object.vertList[| vo]; //vertex_position_3d
-				buffer_write(modelBuffer,buffer_f32,v[0]);
-				buffer_write(modelBuffer,buffer_f32,v[1]);
-				buffer_write(modelBuffer,buffer_f32,v[2]);
+			
+		var multimesh = new Model();
+		multimesh.name = modelname;
+			
+		//make a submesh for each grouping
+		for(var gi = 0; gi < ds_list_size(object.groupList); gi++) {
+			var group = object.groupList[| gi];
+			var groupname = group.name;
+			var texname = group.texname;
+			var faces = group.faces;
+			
+			var size = (12 + 4 + 8 + 12) * 3 * array_length(faces);
+			var modelBuffer = buffer_create(size,buffer_fixed,4);
+			
+			for(fi = 0; fi < array_length(faces); fi++) {
+				var face = faces[fi];
+				var o = 0;
+				repeat(3) {
+					var vo = face[o] - object.vOff;
+					var v = object.vertList[| vo]; //vertex_position_3d
+					buffer_write(modelBuffer,buffer_f32,v[0]);
+					buffer_write(modelBuffer,buffer_f32,v[1]);
+					buffer_write(modelBuffer,buffer_f32,v[2]);
 	
-				//vertex_colour
-				buffer_write(modelBuffer,buffer_u32,$FFFFFFFF);
-				//buffer_write(modelBuffer,buffer_f32,1.0);
+					//vertex_colour
+					buffer_write(modelBuffer,buffer_u32,$FFFFFFFF);
+					//buffer_write(modelBuffer,buffer_f32,1.0);
 	
-				var uvo = f[1+o] - object.vtOff;
-				var uv = object.uvList[| uvo]; //vertex_texcoord
-				buffer_write(modelBuffer,buffer_f32,uv[0]);
-				buffer_write(modelBuffer,buffer_f32,uv[1]);
+					var uvo = face[1+o] - object.vtOff;
+					var uv = object.uvList[| uvo]; //vertex_texcoord
+					buffer_write(modelBuffer,buffer_f32,uv[0]);
+					buffer_write(modelBuffer,buffer_f32,uv[1]);
 	
-				var no = f[2+o] - object.vnOff;
-				var n = object.normalList[| no]; //vertex_normal
-				buffer_write(modelBuffer,buffer_f32,n[0]);
-				buffer_write(modelBuffer,buffer_f32,n[1]);
-				buffer_write(modelBuffer,buffer_f32,n[2]);
+					var no = face[2+o] - object.vnOff;
+					var n = object.normalList[| no]; //vertex_normal
+					buffer_write(modelBuffer,buffer_f32,n[0]);
+					buffer_write(modelBuffer,buffer_f32,n[1]);
+					buffer_write(modelBuffer,buffer_f32,n[2]);
 		
-				o += 3;
+					o += 3;
+					}
 				}
-			}		
-		
-		var model = new Model();
-		model.name = modelname;
-		model.modelBuffer = modelBuffer;
-		
-		ds_map_add(global.LOADED_MODELS,modelname,model);
+				
+			var submesh = new _MeshGroup();
+			submesh.name = groupname;
+			if(texname != "" && texname != "None") {submesh.bind_texture(texname);}
+			
+			submesh.vertexBuffer = vertex_create_buffer_from_buffer(modelBuffer, global.VERTEX_FORMAT)
+			multimesh.add_meshgroup(submesh);
+			buffer_delete(modelBuffer);
+			
+			//debug_log("loaded group '" + groupname + "', bound to " + texname,c_gray)
+			}
+			
+		ds_map_add(global.LOADED_MODELS,modelname,multimesh);
 		debug_log("loaded '" + modelname + "'",c_gray)
-		array_push(modelOutput,model);
-		//printf("conversion complete, modeloutput is now %s",array_length(modelOutput));
+		array_push(modelOutput,multimesh);
 		}
-
+		
 	//cleanup
 	for(var i = 0; i < ds_list_size(objects); i++) {
 		var object = objects[| i];
 		ds_list_destroy(object.vertList)
 		ds_list_destroy(object.uvList)
 		ds_list_destroy(object.normalList)
-		ds_list_destroy(object.faceList)
+		ds_list_destroy(object.groupList)
 		delete object;
 		}
 	ds_list_destroy(objects);
-	//printf("performed cleanup");
-
+	
 	//if the file only contained a single model, return just that model
 	if(array_length(modelOutput) == 1) {
 		//printf("doing return singular");
@@ -284,8 +311,10 @@ function model_load_obj(path) {
 	//otherwise, return an array of all the models contained within the 
 	//printf("doing return multiple");
 	return modelOutput;
-}
+	}
 	
+#endregion
+
 // --- raw data models ---
 
 /// @function model_load_raw(path, name)

@@ -33,7 +33,8 @@ function OBJA_ArmatureRenderComponent(_p, _arm) : RenderComponent(_p,false,false
 			finalmat = matrix_multiply(dq_to_matrix(finaldq), renderMatrix)
 			
 			matrix_set(matrix_world,finalmat);
-			vertex_submit(model.vertexBuffer,pr_trianglelist,model.texture);
+			model.submit(pr_trianglelist, model.texture)
+			//vertex_submit(model.vertexBuffer,pr_trianglelist,model.texture);
 			}
 			
 		});

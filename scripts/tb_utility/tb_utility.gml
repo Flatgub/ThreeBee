@@ -1,14 +1,16 @@
-/// @function point_rotate(point,angle);
-/// @param point
-/// @param angle
+/// @function vec2_rotate(point,angle);
+/// @param {vec2}	point
+/// @param {real}	angle
+/// @param {vec2}	[out]	optional, an existing vector to put the modifications into
 function point_rotate(point,angle) {
+	var out = argument_count > 2 ? argument[2] : r2(0,0);
 	var _x = point[COMP_X];
 	var _y = point[COMP_Y];
 	
-	var _dx = _x*dcos(angle) - _y*dsin(angle);
-	var _dy = _y*dcos(angle) + _x*dsin(angle);
+	out[@ 0] = _x*dcos(angle) - _y*dsin(angle);
+	out[@ 1] = _y*dcos(angle) + _x*dsin(angle);
 	
-	return r2(_dx,_dy);
+	return out;
 	}
 
 /// @function angle_wrap(angle)

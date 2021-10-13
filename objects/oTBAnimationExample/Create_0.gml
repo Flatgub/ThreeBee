@@ -15,7 +15,7 @@ var b = benchmark_start("loading meshes")
 meshes = model_load_obj(file)
 debug_log(sprintf("loaded %s models from '%s'",array_length(meshes),file))
 for(var i = 0; i < array_length(meshes); i++) {
-	meshes[i].bake();
+	meshes[i].freeze();
 	meshes[i].texture = sprite_get_texture(sprPistolTex,0)
 	printf("loaded '%s'",meshes[i].name);
 	}
