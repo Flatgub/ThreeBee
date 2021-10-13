@@ -1,4 +1,4 @@
-function RetroShader_Lit() constructor {
+function RetroShader_Lit() : TBShader() constructor {
 	
 	shader = shrRetroLit;
 	
@@ -7,6 +7,7 @@ function RetroShader_Lit() constructor {
 	lightPosUniform = shader_get_uniform(shader,"u_vLightPosition");
 	lightColourUniform = shader_get_uniform(shader,"u_vLightColour");
 	lightStrengthUniform =  shader_get_uniform(shader,"u_fLightStrength");
+	lightMixUniform =  shader_get_uniform(shader,"u_fLightMix");
 	
 	//FOG
 	litFogStartUniform = shader_get_uniform(shader,"u_fFogStart");
@@ -56,6 +57,7 @@ function RetroShader_Lit() constructor {
 		var blendr = col & $FF;
 		
 		shader_set_uniform_f(litBlendUniform, blendr/255, blendg/255, blendb/255, component.alpha);
+		shader_set_uniform_f(lightMixUniform, component.lightMix);
 		}
 	
 	}

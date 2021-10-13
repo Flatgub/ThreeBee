@@ -1,4 +1,4 @@
-function RetroShader_Unlit() constructor {
+function RetroShader_Unlit() : TBShader() constructor {
 	
 	shader = shrRetroUnlit;
 	

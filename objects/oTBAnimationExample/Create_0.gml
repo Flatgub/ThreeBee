@@ -132,4 +132,13 @@ dev_register_command("set_sample_interval",function(args) {
 	},1,"set the animation cache sample interval","interval")
 
 
+var a = {bee: "bap", boo: 8.39, bop: [1,2,3,{hello: "world"}]}
+var out = json_stringify(a);
+var reconstruct = json_parse(out)
+show_debug_message(out)
+show_debug_message(reconstruct)
 
+out = json_beautify(out)
+var reconstruct = json_parse(out)
+show_debug_message(out)
+show_debug_message(reconstruct)

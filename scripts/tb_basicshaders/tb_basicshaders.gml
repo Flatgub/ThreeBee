@@ -6,7 +6,7 @@ dt[12] = 16.0/16.0; dt[13] =  8.0/16.0; dt[14] = 14.0/16.0; dt[15] =  6.0/16.0;
 	
 global.__DITHER_MATRIX = dt;
 
-function BasicShader() constructor {
+function BasicShader() : TBShader() constructor {
 	
 	fogStartUniform = shader_get_uniform(shrBasic,"u_fFogStart");
 	fogEndUniform = shader_get_uniform(shrBasic,"u_fFogEnd");
@@ -37,7 +37,7 @@ function BasicShader() constructor {
 	
 	}
 	
-function BasicShaderBillboard() constructor {
+function BasicShaderBillboard() : TBShader() constructor {
 	
 	unlitFogStartUniform = shader_get_uniform(shrBasicBillboard,"u_fFogStart");
 	unlitFogEndUniform = shader_get_uniform(shrBasicBillboard,"u_fFogEnd");

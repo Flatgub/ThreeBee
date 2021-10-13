@@ -21,6 +21,7 @@ uniform float u_fGeoResolution;
 uniform vec3 u_vLightPosition[NUM_LIGHTS];
 uniform vec3 u_vLightColour[NUM_LIGHTS];
 uniform float u_fLightStrength[NUM_LIGHTS];
+uniform float u_fLightMix;
 
 
 void main()
@@ -32,15 +33,18 @@ void main()
 	
 	
 	vec4 wp = gm_Matrices[MATRIX_WORLD_VIEW] * object_space_pos;
-	wp.xyz = floor(wp.xyz * geores)/ geores;
-	
 	vec4 sp = gm_Matrices[MATRIX_PROJECTION] * wp;
-    gl_Position = sp;
-    
 	
 	//affine texture mapping
 	vec2 uv = in_TextureCoord;
 	v_vTexcoord = vec3(uv * sp.w, sp.w);
+	
+	wp.xyz = floor(wp.xyz * geores)/ geores;
+	
+	sp = gm_Matrices[MATRIX_PROJECTION] * wp;
+	
+    	gl_Position = sp;
+    
 	
 	//lighting
 	
@@ -67,6 +71,10 @@ void main()
 		}
 	
 	vec3 colour = u_vAmbientLightColour + (in_Colour.rgb * totalLightCol);
+	
+	colour = mix(in_Colour.rgb, colour, u_fLightMix);
+	colour = min(colour, in_Colour.rgb); //colour can't become brighter than white
+	
 	//float lum = (colour.r+colour.r+colour.b+colour.g+colour.g+colour.g)/6.0;
 	//colour = vec3(1.0) - colour;
 	
