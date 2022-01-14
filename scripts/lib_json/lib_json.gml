@@ -1,4 +1,6 @@
-/// _bufffer_write_slice(_bufffer, _data__bufffer, _data__start, _data_end)
+// both scripts are credited to yellowafterlife
+
+/// @function bufffer_write_slice(_bufffer, _data__bufffer, _data__start, _data_end)
 function buffer_write_slice(_buff, _data, _start, _end) {
 	
 	var next = _end - _start;
@@ -15,7 +17,7 @@ function buffer_write_slice(_buff, _data, _start, _end) {
 	buffer_seek(_buff, buffer_seek_relative, next);
 	}
 	
-/// json_beautify(json_string)
+/// @function json_beautify(json_string)
 // initialization
 // in old versions of GMS, you'd have this ran separately instead.
 // in GMS2 it'd need to be @"..." instead of just "..."
