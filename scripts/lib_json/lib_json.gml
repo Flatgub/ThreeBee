@@ -1,3 +1,5 @@
+// Author: YellowAfterLife
+
 /// _bufffer_write_slice(_bufffer, _data__bufffer, _data__start, _data_end)
 function buffer_write_slice(_buff, _data, _start, _end) {
 	
