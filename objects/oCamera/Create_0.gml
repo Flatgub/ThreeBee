@@ -1,6 +1,6 @@
 /// @description Camera Instance Creation
 
-z = 16;
+z = 16; 
 
 yaw = 0;
 pitch = 0;
@@ -18,7 +18,7 @@ fov = 0;
 
 enabled = true;
 
-gmCamera = -1;
+gmCamera = /*#cast*/ -1; ///@is {camera}
 
 numOfLights = 0;
 activeLightPositions = [];
@@ -26,8 +26,8 @@ activeLightColours = [];
 activeLightStrengths = [];
 lightingEnabled = false;
 
-cameraShader = undefined;
-cameraShaderMandatory = false;
+cameraShader = undefined; ///@is {TBShader?}
+cameraShaderMandatory = false; 
 
 targetSurface = undefined;
 targetSurfaceNoBG = false;

@@ -3,8 +3,8 @@
 ///@arg {r2} <vo_ld> (Optional) Output 2D vector in GM polar coordinates to overwrite. If unspecified, return a new vector.
 ///@desc Return the GM polar equivalent of the 2D rectangular vector.
 function r2_rec_gmp(vi_xy, vo_ld=[0, 0]) {
-	GMLINEAR_INLINE;
-	var xx = vi_xy[0],
+	GMLINEAR_INLINE
+	var xx = vi_xy[0]
 	var yy = vi_xy[1];
 	vo_ld[@0] = sqrt(xx*xx + yy*yy);
 	vo_ld[@1] = darctan2(-yy, xx);

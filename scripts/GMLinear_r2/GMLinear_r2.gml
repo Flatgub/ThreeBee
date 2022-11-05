@@ -1,3 +1,8 @@
+/// feather ignore all
+/// feather use none
+// feather ignore all
+// feather use none
+
 ///@func r2(x0, x1)
 ///@arg {real} x0
 ///@arg {real} x1

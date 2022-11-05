@@ -34,8 +34,8 @@ function debug_log(_message) {
 	}	
 	
 /// @function debug_alert(message,[col])
-/// @param	{string}	message		the text to add to the console
-/// @param	{colour}	[colour]	the optional colour to show in the editor
+/// @param	{String}	message		the text to add to the console
+/// @param	{Constant.Colour}	[colour]	the optional colour to show in the editor
 /// @description	same as debug_log, but also forces the console open if it wasn't already
 function debug_alert(_message) {
 	var col = argument_count > 1 ? argument[1] : undefined;
@@ -48,8 +48,8 @@ function debug_alert(_message) {
 
 /// @function dev_get_autocomplete(filter, [startswith])
 /// @description	returns a list of all known command names which match the filter
-/// @param {string}	filter		the substring to filter command names by the
-/// @param {bool}	startswith	changes the matchmode from "contains" to "startswith"
+/// @param {String}	filter		the substring to filter command names by the
+/// @param {Bool}	startswith	changes the matchmode from "contains" to "startswith"
 function dev_get_autocomplete(_filter) {	
 	var startswith = (argument_count == 2) ? argument[1] : false;
 	var context = __dev_get_context();

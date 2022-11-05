@@ -1,12 +1,13 @@
 /// @function define_camera(view, width, height, fov, near, far, enabled, shader)
-/// @param viewID
-/// @param width
-/// @param height
-/// @param foV
-/// @param near
-/// @param far
-/// @param enabled
-/// @param shader
+/// @param {number}	viewID
+/// @param {number}	width
+/// @param {number}	height
+/// @param {number}	foV
+/// @param {number}	near
+/// @param {number}	far
+/// @param {bool}	enabled
+/// @param {TBShader}	shader
+/// @returns {oCamera}
 function define_camera(view, width, height, fov, near, far, vis, shader) {
 
 	var newCamera = instance_create_layer(0,0,global.CAMERA_LAYER,oCamera);
@@ -24,8 +25,8 @@ function define_camera(view, width, height, fov, near, far, vis, shader) {
 	view_set_xport(view,0);
 	view_set_yport(view,0);
 
-	if vis {view_set_visible(view,true)}
-	else {view_set_visible(view,false)}
+	if(vis) {view_set_visible(view,true);}
+	else {view_set_visible(view,false);}
 
 	newCamera.gmCamera = camera_create();
 
@@ -46,22 +47,22 @@ function define_camera(view, width, height, fov, near, far, vis, shader) {
 	newCamera.cameraShader = shader;
 
 	//if this is the first camera, make it the main camera
-	if(global.MAIN_CAMERA == undefined) {newCamera.make_main()}
+	if(global.MAIN_CAMERA == undefined) {newCamera.make_main();}
 
 	return newCamera;
 }
 
 /// @function delete_camera(camera)
-/// @param camera
+/// @param {oCamera}	camera
 function delete_camera(cam) {
 	//if this is the main camera, unmark it as such
-	if(global.MAIN_CAMERA == cam) {global.MAIN_CAMERA = undefined}
+	if(global.MAIN_CAMERA == cam) {global.MAIN_CAMERA = undefined;}
 	
 	ds_list_delete(global.ALL_CAMERAS,ds_list_find_index(global.ALL_CAMERAS,cam));
 	ds_map_delete(global.VIEW_CAMERA_MAP,cam.view);
 
 	view_set_visible(cam.view,false);
-	view_set_camera(cam.view,-1);
+	view_set_camera(cam.view,/*#cast*/ -1);
 	camera_destroy(cam.gmCamera);
 	
 	cam._dead = true;
@@ -69,17 +70,17 @@ function delete_camera(cam) {
 	}
 
 /// @function camera_enabled(camera, enabled)
-/// @param cam
-/// @param enabled
+/// @param {oCamera}	cam
+/// @param {bool}		enabled
 function camera_enabled(cam,enabled) {
 	cam.enabled = enabled;
-	view_set_visible(cam.view,enabled)
+	view_set_visible(cam.view,enabled);
 	camera_use_surface(cam,(cam.targetSurface != undefined));
 	}
 	
 /// @function camera_use_surface(camera,boolean)
-/// @param cam
-/// @param option
+/// @param {oCamera}	cam
+/// @param {bool}		option
 function camera_use_surface(cam,option) {
 	if(option) {
 		if(cam.targetSurface == undefined || (cam.targetSurface != undefined && !surface_exists(cam.targetSurface))) {
@@ -89,7 +90,7 @@ function camera_use_surface(cam,option) {
 		}
 	else{
 		if(cam.targetSurface != undefined) {
-			if(surface_exists(cam.targetSurface)) {surface_free(cam.targetSurface)};
+			if(surface_exists(cam.targetSurface)) {surface_free(cam.targetSurface);};
 			view_surface_id[cam.view] = -1; //render to the screen again;
 			cam.targetSurface = undefined;
 			}
@@ -109,19 +110,19 @@ function camera_ready(cam) {
 	}
 
 /// @function get_camera_lookat_vector(camera) 
-/// @param camera
+/// @param {oCamera}	cam
 function get_camera_lookat_vector(cam) {
-	var tiltDegree = lengthdir_x(1,-(cam.pitch))
+	var tiltDegree = lengthdir_x(1,-(cam.pitch));
 
-	var lookPosX = lengthdir_x(tiltDegree,cam.yaw)
-	var lookPosY = lengthdir_y(tiltDegree,cam.yaw)
-	var lookPosZ = lengthdir_y(1,-(cam.pitch))
+	var lookPosX = lengthdir_x(tiltDegree,cam.yaw);
+	var lookPosY = lengthdir_y(tiltDegree,cam.yaw);
+	var lookPosZ = lengthdir_y(1,-(cam.pitch));
 
 	return r3(lookPosX,lookPosY,lookPosZ);
 }
 
 /// @function get_camera_mouse_vector(camera)
-/// @param camera
+/// @param {oCamera}	cam
 function get_camera_mouse_vector(cam) {
 
 	var lookat = get_camera_lookat_vector(cam);
@@ -132,19 +133,19 @@ function get_camera_mouse_vector(cam) {
 }
 
 /// @function get_camera_position_vector(camera)
-/// @param camera
+/// @param {oCamera}	cam
 function get_camera_position_vector(cam) {
 	return r3(cam.x,cam.y,cam.z);
 }
 
 /// @function get_camera_up_vector(camera)
-/// @param camera
+/// @param {oCamera}	cam
 function get_camera_up_vector(cam) {
-	var upTiltDegree = lengthdir_x(1,-(cam.pitch-90))
+	var upTiltDegree = lengthdir_x(1,-(cam.pitch-90));
 
-	var upVecX = lengthdir_x(upTiltDegree,cam.yaw)
-	var upVecY = lengthdir_y(upTiltDegree,cam.yaw)
-	var upVecZ = lengthdir_y(1,-(cam.pitch-90))
+	var upVecX = lengthdir_x(upTiltDegree,cam.yaw);
+	var upVecY = lengthdir_y(upTiltDegree,cam.yaw);
+	var upVecZ = lengthdir_y(1,-(cam.pitch-90));
 
 	return r3(upVecX,upVecY,upVecZ);
 }
@@ -220,7 +221,7 @@ function project_mouse_vector(lookAtVector, upVector, fov, aspect) {
 	var HH = window_get_height();
 
 	//this assumes the viewport for this camera fills the screen.
-	var MOUSE_X = window_mouse_get_x();
+	var MOUSE_X = WW-window_mouse_get_x();
 	var MOUSE_Y = HH-window_mouse_get_y();
 
 	// add UP*MOUSE_Y and X*MOUSE_X vector to TO vector

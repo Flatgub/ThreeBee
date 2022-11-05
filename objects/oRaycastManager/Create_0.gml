@@ -1,0 +1,7 @@
+global.RAYCAST_OBJECTS = ds_list_create();
+
+#macro RAY_RESULT_OBJECT 0
+#macro RAY_RESULT_POSITION 1
+#macro RAY_RESULT_DISTANCE 2
+
+#macro COLLISION_GENERIC 1

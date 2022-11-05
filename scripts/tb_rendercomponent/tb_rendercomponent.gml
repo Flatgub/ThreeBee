@@ -45,6 +45,11 @@ function RenderComponent(_parent,_static, _transparent) constructor{
 		}
 	}
 	
+///@function ModelRenderComponent
+///@param {Id.Instance}		_parent
+///@param {Struct.Model}	_model
+///@param {bool}			_static
+///@param {bool}			_transparent
 function ModelRenderComponent(_parent, _model, _static, _transparent) : RenderComponent(_parent, _static, _transparent) constructor {
 	renderModel = _model;
 	

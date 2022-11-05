@@ -175,7 +175,7 @@ function OBJA_Animation(_name,_armature) constructor{
 			out = argument[1]
 			out.referenceAnimation = self;
 			out.referenceArmature = armature;
-			};
+			}
 		else {out = new OBJA_Animation_Sample(self, _frame);}		
 		
 		//find the two closest samples
