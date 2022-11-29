@@ -102,7 +102,7 @@ function model_load_obj(path) {
 		return group;
 		}
 	
-	if !file_exists(path) {show_error(sprintf("Unable to load model at %s, file does not exist",path),true);};
+	if !file_exists(path) {show_error(string("Unable to load model at {0}, file does not exist",path),true);};
 
 	var file = file_text_open_read(path);
 
@@ -120,7 +120,7 @@ function model_load_obj(path) {
 		var linelen = string_length(line)
 		line = string_copy(line,1,linelen-1); //remove the LF
 		
-		line = string_split(line);
+		line = string_split(line, " ");
 		type = line[0]
 		switch(type) {
 		

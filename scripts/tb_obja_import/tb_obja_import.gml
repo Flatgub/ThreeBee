@@ -23,7 +23,7 @@ function obja_load(_filename) {
 	var finalizeFCurve = function(_context)  {
 		var t = _context.currentFCurveType;
 		var a = _context.currentFCurveAxis;
-		if(global.OBJA_IMPORT_VERBOSE) {printf(" Added FCurve for %s.%s[%s] with %s keyframes.",_context.currentFCurveGroup.boneid,t,a,array_length(_context.currentFCurve.allKeyframes))}
+		if(global.OBJA_IMPORT_VERBOSE) {printf(" Added FCurve for {0}.{1}[{2}] with {3} keyframes.",_context.currentFCurveGroup.boneid,t,a,array_length(_context.currentFCurve.allKeyframes))}
 		switch(t) {
 			case "loc": {_context.currentFCurveGroup.set_location_fcurve(_context.currentFCurve,a);};break;
 			case "rot": {
@@ -38,7 +38,7 @@ function obja_load(_filename) {
 		}
 		
 	var finalizeFCurveGroup = function(_context) {
-		//printf("Finalizing fcurve group for bone %s...",_context.currentFCurveGroup.boneid)
+		//printf("Finalizing fcurve group for bone {0}...",_context.currentFCurveGroup.boneid)
 		_context.currentAnimation.add_fcurve_group(_context.currentFCurveGroup)
 		_context.currentFCurveGroup = undefined;
 		}
@@ -59,7 +59,7 @@ function obja_load(_filename) {
 		
 		if(line == "") {continue;}
 		
-		line = string_split(line);
+		line = string_split(string_trim(line), " ");
 		type = line[0];
 				
 		switch(type) {
@@ -75,7 +75,7 @@ function obja_load(_filename) {
 				var bonelength = real(line[10])*sf
 				var bone = new OBJA_Bone(boneid,bonename,importContext.armature,bonehead,boneaxis,boneangle,bonelength)
 				importContext.armature.add_bone(bone)
-				if(verbose) {printf("Loaded bone #%s: %s",boneid,bonename)}
+				if(verbose) {printf("Loaded bone #{0}: {1}",boneid,bonename)}
 				};break;
 				
 			// Bone relationship
@@ -85,11 +85,11 @@ function obja_load(_filename) {
 				if(array_length(line) > 2) {
 					var par = real(line[2])
 					importContext.armature.link_bones(child,par)
-					if(verbose) {printf("attached %s to %s",child,par)}
+					if(verbose) {printf("attached {0} to {1}",child,par)}
 					}
 				else {
 					//if there's only one number here, its the root bone
-					if(verbose) {printf("%s is now the root bone",child)}
+					if(verbose) {printf("{0} is now the root bone",child)}
 					importContext.armature.rootBone = importContext.armature.allBones[child]
 					}
 				};break;
@@ -103,7 +103,7 @@ function obja_load(_filename) {
 				var axis = [real(line[6]),real(line[7]),real(line[8])]
 				var angle = real(line[9])
 				var bind = importContext.armature.add_mesh_binding(meshname,boneid,off,axis,angle)
-				if(verbose) {printf("Defined mesh pairing for %s to bone %s",meshname,boneid)}
+				if(verbose) {printf("Defined mesh pairing for {0} to bone {1}",meshname,boneid)}
 				};break;
 			
 			// Animation data
@@ -112,7 +112,7 @@ function obja_load(_filename) {
 				var name = line[1]
 				var length = real(line[2])
 				//var framerate = real(line[3]) //we dont use this right now
-				if(verbose) {printf("Loading animation %s",name)}
+				if(verbose) {printf("Loading animation {0}",name)}
 				
 				var anim = new OBJA_Animation(name, importContext.armature)
 				armature.add_animation(anim)
@@ -128,7 +128,7 @@ function obja_load(_filename) {
 				
 				var bone = real(line[1])
 				importContext.currentFCurveGroup = new FCurve_Group(bone);
-				if(verbose) {printf("starting fcurve group for %s",bone)}
+				if(verbose) {printf("starting fcurve group for {0}",bone)}
 				};break;
 			
 			// F-Curve data
@@ -140,8 +140,6 @@ function obja_load(_filename) {
 				importContext.currentFCurve = new FCurve();				
 				importContext.currentFCurveType = line[1]
 				importContext.currentFCurveAxis = real(line[2])
-				
-				//printf("starting fcurve for %s.%s[%s]",importContext.currentFCurveGroup.boneid,importContext.currentFCurveType,importContext.currentFCurveAxis)
 				};break;
 				
 			// Keyframe data

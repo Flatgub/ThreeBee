@@ -87,7 +87,7 @@ else if global.CONSOLE_OPEN {
 			ds_list_destroy(results);
 			}
 		else { //try and autocomplete arguments using suggestion helper
-			var split = string_split(pendingCommand);
+			var split = string_split(pendingCommand, " ");
 			var commandname = split[0];
 			var command = dev_get_command(commandname);
 			//if there's a suggestion helper available
@@ -134,7 +134,7 @@ else if global.CONSOLE_OPEN {
 									//reconstruct the new pendingCommand
 									array_insert(prevargs,0,commandname)
 									array_push(prevargs,suggest);
-									pendingCommand = string_concat(prevargs);
+									pendingCommand = string_join_ext(" ", prevargs);
 									}
 								else {debug_log(commandname + " suggests: " + suggest,CONSOLE_BLUE_COL)}
 								}
@@ -152,7 +152,7 @@ else if global.CONSOLE_OPEN {
 							if(newarg != current && newarg != "") {
 								array_insert(prevargs,0,commandname)
 								array_push(prevargs,newarg);
-								pendingCommand = string_concat(prevargs);
+								pendingCommand = string_join_ext(" ", prevargs);
 								}
 							};break;
 						}

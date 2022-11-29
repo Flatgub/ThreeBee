@@ -31,7 +31,6 @@ void main()
 	//vertex snapping
     vec4 object_space_pos = vec4( in_Position.x, in_Position.y, in_Position.z, 1.0);
 	
-	
 	vec4 wp = gm_Matrices[MATRIX_WORLD_VIEW] * object_space_pos;
 	vec4 sp = gm_Matrices[MATRIX_PROJECTION] * wp;
 	

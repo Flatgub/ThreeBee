@@ -40,7 +40,7 @@ function audio_listener_bind_to_camera(camera) {
 /// @param loops
 /// @param priority
 function audio_source_play(source, sound, loops, priority) {
-	if !instance_exists(source) {printf("audio_source_play failed: audio source %s doesn't exist",source);return -1;}
+	if !instance_exists(source) {printf("audio_source_play failed: audio source {0} doesn't exist",source);return -1;}
 
 	return audio_play_sound_on(source.emitter,sound,loops,priority);
 
@@ -50,7 +50,7 @@ function audio_source_play(source, sound, loops, priority) {
 /// @param source
 /// @param gain
 function audio_source_set_gain(source, gain) {
-	if !instance_exists(source) {printf("audio_source_set_gain failed: audio source %s doesn't exist",source);return;}
+	if !instance_exists(source) {printf("audio_source_set_gain failed: audio source {0} doesn't exist",source);return;}
 
 	audio_emitter_gain(source.emitter,gain)
 }
@@ -61,7 +61,7 @@ function audio_source_set_gain(source, gain) {
 /// @param max_dist
 function audio_source_set_falloff(source, min_dist, max_dist) {
 
-	if !instance_exists(source) {printf("audio_source_set_falloff failed: audio source %s doesn't exist",source);return;}
+	if !instance_exists(source) {printf("audio_source_set_falloff failed: audio source {0} doesn't exist",source);return;}
 
 	audio_emitter_falloff(source.emitter,min_dist,max_dist,1);
 }
@@ -70,7 +70,7 @@ function audio_source_set_falloff(source, min_dist, max_dist) {
 /// @param source
 /// @param pitch
 function audio_source_set_pitch(source, pitch) {
-	if !instance_exists(source) {printf("audio_source_set_pitch failed: audio source %s doesn't exist",source);return;}
+	if !instance_exists(source) {printf("audio_source_set_pitch failed: audio source {0} doesn't exist",source);return;}
 
 	audio_emitter_pitch(source.emitter,pitch)
 }
@@ -79,7 +79,7 @@ function audio_source_set_pitch(source, pitch) {
 /// @param	{Id.oAudioSource}	source	
 /// @param	{Struct.AudioBus}	bus
 function audio_source_assign_bus(source, bus) {
-	if !instance_exists(source) {printf("audio_source_assign_bus failed: audio source %s doesn't exist",source);return;}
+	if !instance_exists(source) {printf("audio_source_assign_bus failed: audio source {0} doesn't exist",source);return;}
 	
 	if(!is_undefined(source.effects_bus)) {
 		delete source.effects_bus;
@@ -92,7 +92,7 @@ function audio_source_assign_bus(source, bus) {
 /// @function audio_source_reset_bus(source)
 /// @param	{Id.oAudioSource}	source
 function audio_source_reset_bus(source) {
-	if !instance_exists(source) {printf("audio_source_reset_bus failed: audio source %s doesn't exist",source);return;}
+	if !instance_exists(source) {printf("audio_source_reset_bus failed: audio source {0} doesn't exist",source);return;}
 	
 	audio_emitter_bus(source.emitter,audio_bus_main);
 	source.effects_bus = undefined;
@@ -103,9 +103,9 @@ function audio_source_reset_bus(source) {
 /// @param	{Struct.AudioEffect}	effect	the audio effect to assign (from audio_effect_create)
 /// @param	{Real}					slot	the slot to assign
 function audio_source_set_effect(source, effect, slot) {
-	if !instance_exists(source) {printf("audio_source_set_effect failed: audio source %s doesn't exist",source);return;}
-	if is_undefined(source.effects_bus) {printf("audio_source_set_effect failed: audio source %s doesn't have an effect bus",source);return;}
-	if slot < 0 || slot >= 8 {printf("audio_source_set_effect failed: effect slot %s is out of range 0-7",slot);return;}
+	if !instance_exists(source) {printf("audio_source_set_effect failed: audio source {0} doesn't exist",source);return;}
+	if is_undefined(source.effects_bus) {printf("audio_source_set_effect failed: audio source {0} doesn't have an effect bus",source);return;}
+	if slot < 0 || slot >= 8 {printf("audio_source_set_effect failed: effect slot {0} is out of range 0-7",slot);return;}
 	
 	source.effects_bus.effects[slot] = effect;
 	}
@@ -114,9 +114,9 @@ function audio_source_set_effect(source, effect, slot) {
 /// @param	{Id.oAudioSource}		source
 /// @param	{Real}					slot	the slot to reset
 function audio_source_reset_effect(source, slot) {
-	if !instance_exists(source) {printf("audio_source_reset_effect failed: audio source %s doesn't exist",source);return;}
-	if is_undefined(source.effects_bus) {printf("audio_source_reset_effect failed: audio source %s doesn't have an effect bus",source);return;}
-	if slot < 0 || slot >= 8 {printf("audio_source_reset_effect failed: effect slot %s is out of range 0-7",slot);return;}
+	if !instance_exists(source) {printf("audio_source_reset_effect failed: audio source {0} doesn't exist",source);return;}
+	if is_undefined(source.effects_bus) {printf("audio_source_reset_effect failed: audio source {0} doesn't have an effect bus",source);return;}
+	if slot < 0 || slot >= 8 {printf("audio_source_reset_effect failed: effect slot {0} is out of range 0-7",slot);return;}
 	
 	source.effects_bus.effects[slot] = undefined;
 	}
@@ -126,9 +126,9 @@ function audio_source_reset_effect(source, slot) {
 /// @param	{Real}					slot	the slot to assign
 /// @returns	{Struct.AudioEffect}
 function audio_source_get_effect(source, slot) {
-	if !instance_exists(source) {printf("audio_source_get_effect failed: audio source %s doesn't exist",source);return undefined;}
-	if is_undefined(source.effects_bus) {printf("audio_source_get_effect failed: audio source %s doesn't have an effect bus",source);return undefined;}
-	if slot < 0 || slot >= 8 {printf("audio_source_get_effect failed: effect slot %s is out of range 0-7",slot);return undefined;}
+	if !instance_exists(source) {printf("audio_source_get_effect failed: audio source {0} doesn't exist",source);return undefined;}
+	if is_undefined(source.effects_bus) {printf("audio_source_get_effect failed: audio source {0} doesn't have an effect bus",source);return undefined;}
+	if slot < 0 || slot >= 8 {printf("audio_source_get_effect failed: effect slot {0} is out of range 0-7",slot);return undefined;}
 	
 	return source.effects_bus.effects[slot];
 	}

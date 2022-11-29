@@ -5,31 +5,12 @@ if(!script_exists(asset_get_index("lib_library"))) {
 
 library_declare("lib_string")
 
-/// @function	sprintf(text, [replacements,...])
-/// @param {string}	text				the base string to replace %s occurances in
-/// @param {string} [replacements]		any number of following replacements
-function sprintf(_text) {
-	if(_text == undefined) {return "";} //nothing provided
-	if(argument_count == 1) {return string(_text);} 
-	
-	var outstring = string(_text);
-	var i = 1;
-	while(string_count("%s",outstring) != 0 && i < argument_count) {
-		var pos = string_pos("%s",outstring);
-		outstring = string_delete(outstring,pos,2);
-		outstring = string_insert(string(argument[i]),outstring,pos);
-		i++;
-		}	
-	return outstring;
-}
-
 /// @function printf(text, [replacements,...])
-/// @description	shortcut for show_debug_message(sprintf(args));
+/// @description	shortcut for show_debug_message(string(args));
 function printf(_text) {
 	var args = array_create(argument_count)
 	for(var i = 0; i < argument_count; i++) {args[i] = argument[i]}
-	var out = script_execute_ext(sprintf,args)
-	show_debug_message(out)
+	show_debug_message_ext(_text, args)
 	}
 
 /// @function string_eat(text, [separator])
@@ -54,22 +35,6 @@ function string_advance(_text) {
 	var sepPoint = string_pos(split,_text);
 	if sepPoint == 0 {return ""}
 	else {return string_copy(_text,sepPoint+1,string_length(_text)+1-sepPoint);}
-	}
-
-/// @function string_split(text, [separator])
-/// @param {string} text			the string to separate
-/// @param {string}	[separator]		the character to use as the separator, " " by default
-/// @description	breaks up a string into an array of substrings based on the split character (default is " ")
-function string_split(_text) {
-	var split = (argument_count > 1) ? argument[1] : " ";
-	var out = [];
-	var i = 0;
-	while(_text != "") {
-		out[i] = string_eat(_text,split);
-		_text = string_advance(_text,split);
-		i++
-		}
-	return out;
 	}
 	
 /// @function string_pad_left(text, width)
@@ -251,31 +216,6 @@ function string_find_matching_length(_list) {
 	return longest_match;
 	}
 	
-/// @function string_starts_with(str, substr)
-function string_starts_with(_string, _substr) {
-	if(_substr == "") {return true;}
-	var len = string_length(_substr);
-	return (string_copy(_string,1,len) == _substr);
-	}
-	
-/// @function string_concat(array, [separator])
-/// @param {array}	array			an array of elemnts
-/// @param {string}	[separator]		the character to use as the separator, " " by default
-/// @description	essentially the opposite of string_split, used to combine an array of elements
-///					back into a single string
-function string_concat(_array) {
-	var out = "";
-	var split = (argument_count > 1) ? argument[1] : " ";
-	
-	for(var i = 0; i < array_length(_array); i++) {
-		out += string(_array[i]);
-		if(i < array_length(_array)-1) {
-			out += split;
-			}
-		}
-	return out;
-	}
-	
 if(library_present("lib_ui")) {
 	
 	function string_strip_formatting(_text) {
@@ -293,7 +233,7 @@ if(library_present("lib_ui")) {
 			if(right_index > ind) {
 				var len = right_index - ind;
 				//var content = string_copy(_text,ind,len);
-				//var dbln = sprintf("format mark from %s to %s, length %s, covers %s", ind, right_index, len, content)
+				//var dbln = string("format mark from {0} to {1}, length {2}, covers {3}", ind, right_index, len, content)
 				//show_debug_message(dbln)
 			
 				_text = string_delete(_text,ind,len)
@@ -339,7 +279,7 @@ if(library_present("lib_ui")) {
 				var distToMarkStart = markstart - lastEat;
 			
 			
-				if(!_silent) {show_debug_message(sprintf("lastEat: %s, copyLen: %s, nextMark: %s, (%s/%s)",lastEat,distToEnd,distToMarkStart,charsEaten,charsToEat))}
+				if(!_silent) {show_debug_message(string("lastEat: {0}, copyLen: {1}, nextMark: {2}, ({3}/{4})",lastEat,distToEnd,distToMarkStart,charsEaten,charsToEat))}
 			
 				if(markstart == 0) {
 					if(!_silent) {show_debug_message("chars remain but there's no format marks left, copy in one go")}

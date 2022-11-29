@@ -224,9 +224,4 @@ function render_scene() {
 	matrix_set(matrix_world,matrix_build_identity());
 
 	gpu_set_cullmode(cull_noculling)
-
-	
-	//printf("total number of swaps: %s",global.swaps);
-
-
 }

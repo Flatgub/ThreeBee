@@ -1,6 +1,5 @@
 /// @function benchmark_start(name)
 function benchmark_start(_name) {
-	//printf("Starting '%s'",_name);
 	return {name: _name, start: get_timer()};
 }
 
@@ -8,7 +7,7 @@ function benchmark_start(_name) {
 /// @function benchmark_end(benchmark);
 function benchmark_end(_benchmark) {
 	var result = benchmark_result(_benchmark)
-	return sprintf("%s took %s",_benchmark.name,result);
+	return string("{0} took {1}",_benchmark.name,result);
 }
 
 /// @function benchmark_result(benchmark)

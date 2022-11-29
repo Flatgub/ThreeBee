@@ -54,7 +54,7 @@ function OBJA_Animation(_name,_armature) constructor{
 			
 		
 		var dif = round(((length-numFrames)/length)*100)
-		debug_log(sprintf("%s: Generated %s samples using %s placement (interval %s), a %s% reduction. (%s)",name,numFrames, mode, frameSampleInterval, dif,benchmark_result(b)),$ffff88)
+		debug_log(string("{0}: Generated {1} samples using {2} placement (interval {3}), a {4}% reduction. ({5})",name,numFrames, mode, frameSampleInterval, dif,benchmark_result(b)),$ffff88)
 		
 		delete b		
 		}

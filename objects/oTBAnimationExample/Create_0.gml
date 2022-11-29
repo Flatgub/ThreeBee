@@ -13,11 +13,11 @@ else {file = fname; debug_log("reloading mesh file " +fname);}
 //actually load the meshes
 var b = benchmark_start("loading meshes")
 meshes = model_load_obj(file)
-debug_log(sprintf("loaded %s models from '%s'",array_length(meshes),file))
+debug_log(string("loaded {0} models from '{1}'",array_length(meshes),file))
 for(var i = 0; i < array_length(meshes); i++) {
 	meshes[i].freeze();
 	meshes[i].texture = sprite_get_texture(sprPistolTex,0)
-	printf("loaded '%s'",meshes[i].name);
+	printf("loaded '{0}'",meshes[i].name);
 	}
 benchmark_end(b)
 	
