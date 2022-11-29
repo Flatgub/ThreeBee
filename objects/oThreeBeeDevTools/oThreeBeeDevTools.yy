@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "oScreenManager",
+  "name": "oThreeBeeDevTools",
   "spriteId": null,
   "solid": false,
   "visible": true,

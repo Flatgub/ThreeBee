@@ -1,6 +1,6 @@
 /// @description Animation Example Step
 
-if(global.CONSOLE_OPEN) {exit}
+if(global.CONSOLE_OPEN || ImGuiGML.WantCaptureMouse) {exit}
 
 
 if(armature != undefined) {

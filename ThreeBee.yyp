@@ -25,6 +25,7 @@
     {"id":{"name":"tb_matrix","path":"scripts/tb_matrix/tb_matrix.yy",},"order":2,},
     {"id":{"name":"texMissing","path":"sprites/texMissing/texMissing.yy",},"order":0,},
     {"id":{"name":"tb_obja_armature_rendercomponent","path":"scripts/tb_obja_armature_rendercomponent/tb_obja_armature_rendercomponent.yy",},"order":2,},
+    {"id":{"name":"oThreeBeeDevTools","path":"objects/oThreeBeeDevTools/oThreeBeeDevTools.yy",},"order":11,},
     {"id":{"name":"oDevConsole","path":"objects/oDevConsole/oDevConsole.yy",},"order":2,},
     {"id":{"name":"tb_light","path":"scripts/tb_light/tb_light.yy",},"order":1,},
     {"id":{"name":"texWhite","path":"sprites/texWhite/texWhite.yy",},"order":4,},
