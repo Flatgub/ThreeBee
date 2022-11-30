@@ -85,7 +85,7 @@ function define_camera_orthographic(view, width, height, near, far, enabled, sha
 }
 
 /// @function delete_camera(camera)
-/// @param {oCamera}	camera
+/// @param {Id.oCamera}	camera
 function delete_camera(cam) {
 	//if this is the main camera, unmark it as such
 	if(global.MAIN_CAMERA == cam) {global.MAIN_CAMERA = undefined;}
@@ -96,6 +96,10 @@ function delete_camera(cam) {
 	view_set_visible(cam.view,false);
 	view_set_camera(cam.view,/*#cast*/ -1);
 	camera_destroy(cam.gmCamera);
+	
+	if(cam.targetSurface != undefined && surface_exists(cam.targetSurface)) {
+		surface_free(cam.targetSurface)
+		}
 	
 	cam._dead = true;
 	instance_destroy(cam);

@@ -11,8 +11,7 @@ if(showDevTools && imguigml_ready()) {
 		//TOOLS
 		if(imguigml_begin_menu("Tools")) {
 			if(imguigml_menu_item("Model Viewer")) {
-				showModelViewer = true;
-				refreshModelList()
+				openModelViewer();
 				}
 			imguigml_end_menu()
 			}
@@ -48,6 +47,9 @@ if(showDevTools && imguigml_ready()) {
 			imguigml_end_child()
 			
 			showModelViewer = _modelViewWindow[1]
+			if(showModelViewer == false) {
+				closeModelViewer()
+				}
 			imguigml_end();
 			}
 		

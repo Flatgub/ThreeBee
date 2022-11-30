@@ -7,25 +7,58 @@ imguigml_add_font_from_ttf("pixel04b24.ttf", 12.0);
 showDevTools = false;
 devToolsShowChildBorders = false;
 
-
 showModelViewer = false;
+
+modelViewerSelectedModel = 0;
+modelViewerCameraPanelIsHovered = false;
+
+modelViewerSurfaceSize = 500;
+modelViewerCamera = undefined;
+viewedModel = undefined;
+modelViewerGrid = undefined;
+
+/// opens the model viewer window (get model list + create camera + create model)
+openModelViewer = function() {
+	showModelViewer = true;
+	refreshModelList();
+	startModelViewerCamera();
+	
+	viewedModel = new ModelRenderComponent(id, global.DEFAULT_MODEL, false, false)
+	viewedModel.renderLayers = DEVTOOLS_MODELVIEW_RENDERLAYER
+	
+	modelViewerGrid = instance_create_layer(0,0,"Instances",oGridFloor)
+	modelViewerGrid.gridFloor.renderLayers = DEVTOOLS_MODELVIEW_RENDERLAYER
+	}
+	
+/// closes the model viewer window (free the camera + free the model)
+closeModelViewer = function() {
+	showModelViewer = false;
+	stopModelViewerCamera();
+	viewedModel.cleanup();
+	instance_destroy(modelViewerGrid)
+	
+	viewedModel = undefined;
+	modelViewerGrid = undefined;
+	}
 
 
 refreshModelList = function() {
 	modelList = ds_map_keys_to_array(global.LOADED_MODELS)
 	}
 
-refreshModelList()
+startModelViewerCamera = function() {
+	modelViewerCamera = define_camera_perspective(DEVTOOLS_MODELVIEW_VIEWID,modelViewerSurfaceSize,modelViewerSurfaceSize,70,0.1,300,true,global.DEFAULT_BASIC_SHADER)
+	camera_use_surface(modelViewerCamera, true)
+	modelViewerCamera.renderLayerMode = TB_RenderLayerModes.ExludeOthers
+	modelViewerCamera.renderLayers = DEVTOOLS_MODELVIEW_RENDERLAYER
+	
+	resetModelViewerCamera();
+	}
 
-modelViewerSelectedModel = 0;
-
-modelViewerSurfaceSize = 500;
-modelViewerCamera = define_camera_perspective(DEVTOOLS_MODELVIEW_VIEWID,modelViewerSurfaceSize,modelViewerSurfaceSize,70,0.1,300,true,global.DEFAULT_BASIC_SHADER)
-camera_use_surface(modelViewerCamera, true)
-modelViewerCamera.renderLayerMode = TB_RenderLayerModes.ExludeOthers
-modelViewerCamera.renderLayers = DEVTOOLS_MODELVIEW_RENDERLAYER
-modelViewerCamera.x = -64; 
-modelViewerCameraPanelIsHovered = false;
+stopModelViewerCamera = function() {
+	delete_camera(modelViewerCamera)
+	modelViewerCamera = undefined;
+	}
 
 updateModelViewerCamera = function() {
 	//face towards center
@@ -49,7 +82,6 @@ resetModelViewerCamera = function() {
 	updateModelViewerCamera();
 	}
 
-
 updateSelectedModel = function(newSelection) {
 	modelViewerSelectedModel = newSelection;
 	var model = global.LOADED_MODELS[? modelList[modelViewerSelectedModel]];
@@ -58,20 +90,13 @@ updateSelectedModel = function(newSelection) {
 	//texture = global.DEFAULT_TEXTURE
 	}
 	
-resetModelViewerCamera();
-
-modelViewerGrid = instance_create_layer(0,0,"Instances",oGridFloor)
-modelViewerGrid.gridFloor.renderLayers = DEVTOOLS_MODELVIEW_RENDERLAYER
-
 dev_register_command("tb_toggle_devtools", function(args) {
 	showDevTools = !showDevTools
 	debug_log("devtools " + (showDevTools ? "enabled" : "disabled"))
 	}, 0, "toggles the devtools", "");
 	
 
-viewedModel = new ModelRenderComponent(id, global.DEFAULT_MODEL, false, false)
-viewedModel.renderLayers = DEVTOOLS_MODELVIEW_RENDERLAYER
 
-//rendcomp = new RenderComponent(id, false, false)
-//rendcomp.renderTexture = sprite_get_texture(texWhite,0)
-//rendcomp.renderLayers = DEVTOOLS_MODELVIEW_RENDERLAYER
+
+
+
