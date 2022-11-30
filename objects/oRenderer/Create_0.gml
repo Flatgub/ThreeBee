@@ -48,7 +48,9 @@ global.FOG_END = 400;
 
 // ### MODELS ###
 global.LOADED_MODELS = ds_map_create();
-global.BAKED_MODELS = ds_map_create();
+
+// ### ARMATURES ###
+global.LOADED_ARMATURES = ds_map_create();
 
 //model_load_raw("models/mdl_unknown.mdl","mdl_unknown");
 //model_to_vbuffer("cube");

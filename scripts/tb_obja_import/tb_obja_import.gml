@@ -180,7 +180,7 @@ function obja_load(_filename) {
 	armature.rebake_animations();
 	
 	printf("finished loading '" + armature.name + "'");
+	ds_map_add(global.LOADED_ARMATURES,armature.name,armature);
 	
 	return armature;
-	
 	}

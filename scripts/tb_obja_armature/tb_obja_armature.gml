@@ -42,10 +42,19 @@ function OBJA_Armature_Template() constructor{
 	static has_animation = function(_name) {
 		return variable_struct_exists(animationLibrary, _name);
 		}
-		
+
+	/// @function get_animation(name)
+	/// @description	returns the animation of the given name, or undefined if no such animation exists
+	/// @param	{string}	name	the name of the animation
+	///	@return	{Struct.OBJA_Animation?}
 	static get_animation = function(_name) {
 		if(has_animation(_name)) {return animationLibrary[$ _name]}
 		return undefined;
+		}
+	
+	/// @function list_all_animations()
+	static list_all_animations = function() {
+		return variable_struct_get_names(animationLibrary)
 		}
 	
 	static rebake_animations = function() {
@@ -84,14 +93,7 @@ function OBJA_Armature_Instance(_armature) constructor {
 				}
 			
 			if(!animationFinished) {
-				//tick forwards
-				animationFrame += animationSpeed;
-				animationFrame = clamp(animationFrame, 0, activeAnimation.length);
-			
-				//mark finished if necessary
-				if(animationFrame == activeAnimation.length) {animationFinished = true;}
-			
-				update_animation_sample();
+				animation_advance_frame()
 				}
 			}
 		}
@@ -124,9 +126,36 @@ function OBJA_Armature_Instance(_armature) constructor {
 			}
 		}
 	
+	
+	static set_animation_frame = function(frame) {
+		animationFrame = frame;
+		_handle_frame_update();
+		}
+		
+	static _handle_frame_update = function() {
+		animationFrame = clamp(animationFrame, 0, activeAnimation.length);
+		//mark finished if necessary
+		animationFinished = (animationFrame == activeAnimation.length)
+		update_animation_sample();
+		}
+	
+	
 	static restart_animation = function() {
 		animationFinished = false;
 		animationFrame = 0;
+		}
+		
+	static animation_advance_frame = function() {
+		//tick forwards
+		animationFrame += animationSpeed;
+		
+		_handle_frame_update();
+		}
+		
+	static animation_rewind_frame = function() {
+		//tick backwards
+		animationFrame -= animationSpeed;
+		_handle_frame_update();
 		}
 	
 	update_animation_sample();

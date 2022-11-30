@@ -28,7 +28,7 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Core",
-    "path": "folders/ThreeBee/Core.yy",
+    "name": "DevTools",
+    "path": "folders/ThreeBee/Core/DevTools.yy",
   },
 }

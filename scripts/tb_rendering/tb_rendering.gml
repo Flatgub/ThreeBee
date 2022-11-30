@@ -1,7 +1,7 @@
 //returns true if the component should be render
 function __compare_layers(_component, _camera) {
 	switch(_camera.renderLayerMode) {
-		case TB_RenderLayerModes.Ignore: {return _component.renderLayers != DEVTOOLS_MODELVIEW_RENDERLAYER;};break;
+		case TB_RenderLayerModes.Ignore: {return _component.renderLayers != DEVTOOLS_DEVCAMERA_RENDERLAYER;};break;
 		//if any flags match, skip
 		case TB_RenderLayerModes.ExcludeLayers: {
 			return (_component.renderLayers & _camera.renderLayers == 0)
