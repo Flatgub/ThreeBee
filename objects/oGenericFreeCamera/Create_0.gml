@@ -21,7 +21,7 @@ subZ = 0;
 
 mouseLock = false;
 
-thisCamera = define_camera(0,global.WINDOW_WIDTH,global.WINDOW_HEIGHT,58,0.1,320,true,new RetroShader_Lit());
+thisCamera = define_camera_perspective(0,global.WINDOW_WIDTH,global.WINDOW_HEIGHT,58,0.1,320,true,new RetroShader_Lit());
 audio_listener_bind_to_camera(thisCamera)
 
 thisCamera.lightingEnabled = true;

@@ -37,6 +37,7 @@ renderLayers = 0;
 
 cameraMatrix = matrix_build_identity();
 projectionMatrix = matrix_build_identity();
+projectionMode = TB_CameraModes.Perspective;
 
 _dead = false;
 

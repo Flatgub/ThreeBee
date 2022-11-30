@@ -52,6 +52,7 @@ armInst = new OBJA_Armature_Instance(armature)
 
 skeletonrenderer = new OBJA_SkeletonRenderComponent(id, armInst)
 skeletonrenderer.dontRender = true;
+skeletonrenderer.customShader = global.DEFAULT_BASIC_SHADER 
 
 paused = true;
 showLabels = false;

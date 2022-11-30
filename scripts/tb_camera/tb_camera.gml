@@ -1,15 +1,8 @@
-/// @function define_camera(view, width, height, fov, near, far, enabled, shader)
-/// @param {number}	viewID
-/// @param {number}	width
-/// @param {number}	height
-/// @param {number}	foV
-/// @param {number}	near
-/// @param {number}	far
-/// @param {bool}	enabled
-/// @param {TBShader}	shader
-/// @returns {oCamera}
-function define_camera(view, width, height, fov, near, far, vis, shader) {
 
+/// @function __tb_create_camera(view, width, height, near, far, enabled, shader)
+/// @description	INTERNAL does most of the common work for creating a camera without the proj matrix
+///					the camera this returns IS NOT READY FOR USE
+function __tb_create_camera(view, width, height, near, far, enabled, shader) {
 	var newCamera = instance_create_layer(0,0,global.CAMERA_LAYER,oCamera);
 
 	newCamera.view = view;
@@ -17,15 +10,14 @@ function define_camera(view, width, height, fov, near, far, vis, shader) {
 	newCamera.height = height;
 	newCamera.zNear = near;
 	newCamera.zFar = far;
-	newCamera.fov = fov;
-	newCamera.enabled = vis;
+	newCamera.enabled = enabled;
 
 	view_set_wport(view,width);
 	view_set_hport(view,height);
 	view_set_xport(view,0);
 	view_set_yport(view,0);
 
-	if(vis) {view_set_visible(view,true);}
+	if(enabled) {view_set_visible(view,true);}
 	else {view_set_visible(view,false);}
 
 	newCamera.gmCamera = camera_create();
@@ -33,13 +25,10 @@ function define_camera(view, width, height, fov, near, far, vis, shader) {
 	newCamera.aspect = -(width/height);
 
 	newCamera.cameraMatrix = matrix_build_identity();
-	newCamera.projectionMatrix = matrix_build_projection_perspective_fov(fov,(width/height),near,far);
-
-	camera_set_proj_mat(newCamera.gmCamera,newCamera.projectionMatrix);
 
 	view_set_camera(view, newCamera.gmCamera);
 
-	camera_set_update_script(view_camera[view],update_camera);
+	camera_set_update_script(view_camera[view],__tb_update_camera);
 
 	ds_map_set(global.VIEW_CAMERA_MAP,view,newCamera);
 	ds_list_add(global.ALL_CAMERAS,newCamera);
@@ -49,6 +38,49 @@ function define_camera(view, width, height, fov, near, far, vis, shader) {
 	//if this is the first camera, make it the main camera
 	if(global.MAIN_CAMERA == undefined) {newCamera.make_main();}
 
+	return newCamera;
+	}
+
+/// @function define_camera_perspective(view, width, height, fov, near, far, enabled, shader)
+/// @param {Real}				viewID	The GM View ID to bind this camera to (0-7)
+/// @param {Real}				width	The width of the viewport
+/// @param {Real}				height	The height of the viewport
+/// @param {Real}				foV		The field of vision for the camera (in degrees)
+/// @param {Real}				near	The distance of the near clipping plane
+/// @param {Real}				far		The distance of the far clipping plane
+/// @param {Bool}				enabled	Whether the camera should start enabled or disabled
+/// @param {Struct.TBShader}	shader	The shader to use for this camera
+/// @returns {oCamera}
+function define_camera_perspective(view, width, height, fov, near, far, enabled, shader) {
+
+	var newCamera = __tb_create_camera(view, width, height, near, far, enabled, shader)
+	newCamera.fov = fov;
+
+	newCamera.projectionMode = TB_CameraModes.Perspective;	
+	newCamera.projectionMatrix = matrix_build_projection_perspective_fov(fov,(width/height),near,far);
+	camera_set_proj_mat(newCamera.gmCamera,newCamera.projectionMatrix);
+	
+	return newCamera;
+}
+
+/// @function define_camera_orthographic(view, width, height, near, far, enabled, shader)
+/// @param {Real}				viewID	The GM View ID to bind this camera to (0-7)
+/// @param {Real}				width	The width of the viewport
+/// @param {Real}				height	The height of the viewport
+/// @param {Real}				near	The distance of the near clipping plane
+/// @param {Real}				far		The distance of the far clipping plane
+/// @param {Bool}				enabled	Whether the camera should start enabled or disabled
+/// @param {Struct.TBShader}	shader	The shader to use for this camera
+/// @returns {oCamera}
+function define_camera_orthographic(view, width, height, near, far, enabled, shader) {
+
+	var newCamera = __tb_create_camera(view, width, height, near, far, enabled, shader)
+	newCamera.fov = -1;
+
+	newCamera.projectionMode = TB_CameraModes.Orthographic;	
+	newCamera.projectionMatrix = matrix_build_projection_ortho(width,height,near,far);
+	camera_set_proj_mat(newCamera.gmCamera,newCamera.projectionMatrix);
+	
 	return newCamera;
 }
 
@@ -78,11 +110,12 @@ function camera_enabled(cam,enabled) {
 	camera_use_surface(cam,(cam.targetSurface != undefined));
 	}
 	
-/// @function camera_use_surface(camera,boolean)
-/// @param {oCamera}	cam
-/// @param {bool}		option
-function camera_use_surface(cam,option) {
-	if(option) {
+/// @function camera_use_surface(camera, enabled)
+/// @description controls whether a camera should output to a surface instead of the screen
+/// @param {Id.oCamera}	camera	the camera to use
+/// @param {bool}		enabled	whether the camera should output to a surface
+function camera_use_surface(cam,enabled) {
+	if(enabled) {
 		if(cam.targetSurface == undefined || (cam.targetSurface != undefined && !surface_exists(cam.targetSurface))) {
 			cam.targetSurface = surface_create(cam.width,cam.height);
 			}
@@ -122,7 +155,7 @@ function get_camera_lookat_vector(cam) {
 }
 
 /// @function get_camera_mouse_vector(camera)
-/// @param {oCamera}	cam
+/// @param {Id.oCamera}	cam
 function get_camera_mouse_vector(cam) {
 
 	var lookat = get_camera_lookat_vector(cam);
@@ -133,13 +166,13 @@ function get_camera_mouse_vector(cam) {
 }
 
 /// @function get_camera_position_vector(camera)
-/// @param {oCamera}	cam
+/// @param {Id.oCamera}	cam
 function get_camera_position_vector(cam) {
 	return r3(cam.x,cam.y,cam.z);
 }
 
 /// @function get_camera_up_vector(camera)
-/// @param {oCamera}	cam
+/// @param {Id.oCamera}	cam	
 function get_camera_up_vector(cam) {
 	var upTiltDegree = lengthdir_x(1,-(cam.pitch-90));
 
@@ -151,10 +184,11 @@ function get_camera_up_vector(cam) {
 }
 
 /// @function camera_look_at(camera, _x, _y, _z)
-/// @param camera
-/// @param x
-/// @param y
-/// @param z
+/// @description turn the given camera to face towards the point
+/// @param {Id.oCamera}	camera	The camera to turn
+/// @param {Real}	x			The x coordinate to look at
+/// @param {Real}	y			The y coordinate to look at
+/// @param {Real}	z			The z coordinate to look at
 function camera_look_at(camera, _x, _y, _z) {
 	var tx = _x;
 	var ty = _y;
@@ -167,9 +201,10 @@ function camera_look_at(camera, _x, _y, _z) {
 }
 
 /// @function camera_turn_by(camera, yaw, pitch)
-/// @param camera
-/// @param yaw
-/// @param pitch
+/// @description turn the camera relatively by a given yaw and pitch
+/// @param {Id.oCamera}	camera	The camera to turn
+/// @param {Real}		yaw		The amount to rotate the camera around the z axis (in degrees)
+/// @param {Real}		pitch	The amount to tilt the camera up or down (in degrees)
 function camera_turn_by(cam, yaw, pitch) {
 	cam.yaw += yaw;
 	cam.pitch += pitch;
@@ -184,6 +219,7 @@ function camera_turn_by(cam, yaw, pitch) {
 /// @param fov
 /// @param aspect
 function project_mouse_vector(lookAtVector, upVector, fov, aspect) {
+	//TODO: this only works with projection cameras
 
 	// modified version of a script originally written by "Yourself" of the gamemaker forums long ago
 	// although the original thread is lost.
@@ -234,8 +270,11 @@ function project_mouse_vector(lookAtVector, upVector, fov, aspect) {
 	return [mX/mm, mY/mm, mZ/mm];
 }
 
-/// @function camera_point_to_screenspace(camera, vec3)
+/// @function camera_point_to_screenspace(camera, point)
 /// @description convert a 3D position into 2D screenspace coordinates
+/// @param	{Id.oCamera}	camera	The camera to do the transformation using
+/// @param	{Array<Real>}	point	The point to convert to 2D space
+/// @returns	{Array<Real>}
 function camera_point_to_screenspace(camera, vec3) {
 	var p4 = r4(vec3[0],vec3[1],vec3[2],1);
 
@@ -254,8 +293,9 @@ function camera_point_to_screenspace(camera, vec3) {
 	return [pX, pY, screenpoint[2]]
 	}
 
-/// @function update_camera()
-function update_camera() {
+/// @function __tb_update_camera()
+/// @description	INTERNAL the update function assigned to each camera
+function __tb_update_camera() {
 
 	var multi = 5;
 

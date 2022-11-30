@@ -1,4 +1,7 @@
-
+enum TB_CameraModes {
+	Perspective,
+	Orthographic
+	}
 
 enum TB_RenderLayerModes {
 	Ignore,			//render all layers

@@ -20,7 +20,7 @@ refreshModelList()
 modelViewerSelectedModel = 0;
 
 modelViewerSurfaceSize = 500;
-modelViewerCamera = define_camera(DEVTOOLS_MODELVIEW_VIEWID,modelViewerSurfaceSize,modelViewerSurfaceSize,70,0.1,300,true,global.DEFAULT_BASIC_SHADER)
+modelViewerCamera = define_camera_perspective(DEVTOOLS_MODELVIEW_VIEWID,modelViewerSurfaceSize,modelViewerSurfaceSize,70,0.1,300,true,global.DEFAULT_BASIC_SHADER)
 camera_use_surface(modelViewerCamera, true)
 modelViewerCamera.renderLayerMode = TB_RenderLayerModes.ExludeOthers
 modelViewerCamera.renderLayers = DEVTOOLS_MODELVIEW_RENDERLAYER
