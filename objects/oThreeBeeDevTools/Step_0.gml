@@ -4,6 +4,17 @@ if(showDevTools && imguigml_ready()) {
 		
 		//FILE
 		if(imguigml_begin_menu("File")) {
+			if(imguigml_menu_item("Import Model")) {
+				var file = get_open_filename("*.obj","");
+				if(file != "") {model_load_obj(file, undefined, true)}
+				}
+				
+			if(imguigml_menu_item("Import Armature")) {
+				var file = get_open_filename("*.obja","");
+				if(file != "") {obja_load(file)}
+				}
+				
+			imguigml_separator()
 			if(imguigml_menu_item("Exit")) {game_end();}
 			imguigml_end_menu()
 			}
@@ -31,7 +42,7 @@ if(showDevTools && imguigml_ready()) {
 	if(showModelViewer) {__tb_devtools_imgui_modelviewer()}
 	else if(showArmatureViewer) {
 		__tb_devtools_imgui_armatureviewer()
-		if(playingSelectedAnimation) {
+		if(playingSelectedAnimation && armatureInst != undefined) {
 			armatureInst.update();
 			if(armatureInst.animationFinished && !armatureInst.animationLoop) {
 				playingSelectedAnimation = false;

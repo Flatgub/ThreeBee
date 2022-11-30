@@ -119,8 +119,8 @@
   },
   "RoomOrderNodes": [
     {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
-    {"roomId":{"name":"rm_test_persistance","path":"rooms/rm_test_persistance/rm_test_persistance.yy",},},
     {"roomId":{"name":"rm_example","path":"rooms/rm_example/rm_example.yy",},},
+    {"roomId":{"name":"rm_test_persistance","path":"rooms/rm_test_persistance/rm_test_persistance.yy",},},
   ],
   "Folders": [
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Animation Curves","folderPath":"folders/Animation Curves.yy","order":12,},

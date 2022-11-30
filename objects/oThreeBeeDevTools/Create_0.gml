@@ -21,7 +21,7 @@ devToolsGrid = undefined; //gridfloor used in dev tool visualisations
 /// @description start up the dev tools visualizer camera.
 ///				 only one of these can exist at a time to minimise how many GMCameras we have to use
 create_dev_tools_camera = function() {
-	devToolsCamera = define_camera_perspective(DEVTOOLS_DEVCAMERA_VIEWID,devToolsCameraSize,devToolsCameraSize,70,0.1,300,true,global.DEFAULT_BASIC_SHADER)
+	devToolsCamera = define_camera_perspective(DEVTOOLS_DEVCAMERA_VIEWID,devToolsCameraSize,devToolsCameraSize,70,0.1,1000,true,global.DEFAULT_BASIC_SHADER)
 	camera_use_surface(devToolsCamera, true)
 	devToolsCamera.renderLayerMode = TB_RenderLayerModes.ExludeOthers
 	devToolsCamera.renderLayers = DEVTOOLS_DEVCAMERA_RENDERLAYER
@@ -118,6 +118,7 @@ close_model_viewer_window = function() {
 /// @description	update the list of models shown in the model viewer
 refresh_model_list = function() {
 	modelList = ds_map_keys_to_array(global.LOADED_MODELS)
+	array_sort(modelList,false)
 	}
 
 update_selected_model = function(newSelection) {
@@ -125,6 +126,9 @@ update_selected_model = function(newSelection) {
 	var model = global.LOADED_MODELS[? modelList[modelViewerSelectedModel]];
 	viewedModel.renderModel = model
 	viewedModel.renderTexture = model.texture
+	if(model.texture == global.DEFAULT_TEXTURE) {
+		viewedModel.renderTexture = sprite_get_texture(texWhite,0)
+		}
 	//texture = global.DEFAULT_TEXTURE
 	}
 #endregion
@@ -138,6 +142,7 @@ selectedAnimationIndex = 0;
 selectedAnimation = undefined;
 playingSelectedAnimation = false;
 loopingSelectedAnimation = false;
+animationSpeed = 1
 
 showArmatureSkeleton = false;
 animationSkeletonRenderer = undefined;
@@ -188,6 +193,7 @@ close_armature_viewer_window = function() {
 /// @function update_armature_list() 
 update_armature_list = function() {
 	armatureList = ds_map_keys_to_array(global.LOADED_ARMATURES)
+	array_sort(armatureList,false)
 	}
 
 /// @function update_selected_armature(newSelection) 
@@ -228,6 +234,7 @@ update_selected_animation = function(newSelection) {
 	var animationName = animationList[selectedAnimationIndex]
 	selectedAnimation = selectedArmature.get_animation(animationName);
 	armatureInst.set_animation(animationName, loopingSelectedAnimation);
+	armatureInst.animationSpeed = animationSpeed;
 	}
 	
 /// @function armatureviewer_play_button
@@ -266,6 +273,11 @@ armatureviewer_set_loopanim = function(value) {
 armatureviewer_set_showskeleton = function(enable) {
 	showArmatureSkeleton = enable
 	animationSkeletonRenderer.dontRender = !showArmatureSkeleton;
+	}
+
+armatureviewer_set_animation_speed = function(value) {
+	animationSpeed = value;
+	armatureInst.animationSpeed = animationSpeed;
 	}
 		
 #endregion

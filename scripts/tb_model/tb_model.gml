@@ -82,11 +82,12 @@ function _MeshGroup() constructor {
 #endregion
 
 #region [ Loading Models ]
-/// @function model_load_obj(path, [name])
-/// @param path
-/// @param name
-function model_load_obj(path) {
-	var name = (argument_count == 2) ? argument[1] : path;
+/// @function model_load_obj(path, [name], [freeze_on_load=false])
+/// @param {string} path				the path of the file
+/// @param {string} [name]				the custom name to give the model
+/// @param {bool}	[freeze_on_load]	whether to immediately freeze the meshes
+function model_load_obj(path, name, freeze_on_load=false) {
+	name = name ?? path;
 
 	var objects = ds_list_create();
 
@@ -280,6 +281,7 @@ function model_load_obj(path) {
 			if(texname != "" && texname != "None") {submesh.bind_texture(texname);}
 			
 			submesh.vertexBuffer = vertex_create_buffer_from_buffer(modelBuffer, global.VERTEX_FORMAT)
+			if(freeze_on_load) {submesh.freeze()}
 			multimesh.add_meshgroup(submesh);
 			buffer_delete(modelBuffer);
 			

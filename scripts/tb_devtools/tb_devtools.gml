@@ -1,5 +1,3 @@
-
-
 function __tb_devtools_imgui_modelviewer() {
 	with(oThreeBeeDevTools) {
 		var winsizew = 760;
@@ -11,6 +9,8 @@ function __tb_devtools_imgui_modelviewer() {
 			// SCROLLABLE MODEL SELECTOR LIST
 			imguigml_begin_child("modelselector",200,0,devToolsShowChildBorders)
 			imguigml_text("All Models")
+			imguigml_same_line()
+			if(imguigml_button("Refresh")) {refresh_model_list();}
 			imguigml_begin_child("",200,0,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
 			imguigml_push_item_width(winsizeh)
 			var ret = imguigml_list_box("",modelViewerSelectedModel,modelList,floor(winsizeh / 20))
@@ -48,6 +48,8 @@ function __tb_devtools_imgui_armatureviewer() {
 			// SCROLLABLE ARMATURE SELECTOR LIST
 			imguigml_begin_child("armatureselector",200,0,devToolsShowChildBorders)
 			imguigml_text("All Armatures")
+			imguigml_same_line()
+			if(imguigml_button("Refresh")) {update_armature_list();}
 			imguigml_begin_child("",200,(winsizeh/3)*2,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
 			imguigml_push_item_width(winsizeh)
 			var ret = imguigml_list_box("",armatureViewerSelectedArmature,armatureList,24)
@@ -131,13 +133,17 @@ function __tb_devtools_imgui_armatureviewer() {
 			imguigml_same_line()
 			imguigml_text(string("Frame: {0} / {1}",armatureInst.animationFrame, armatureInst.activeAnimation.length))
 			
+			imguigml_text("AnimSpeed:")
+			imguigml_same_line()
+			imguigml_push_item_width(64)
+			var ret = imguigml_input_float("##animspeed",animationSpeed,0,0.1,3)
+			if(ret[0]) {armatureviewer_set_animation_speed(ret[1])};
+			
 			var ret =  imguigml_checkbox("Loop Animation",loopingSelectedAnimation)
 			if(ret[0]) {armatureviewer_set_loopanim(ret[1])}
 			
 			ret = imguigml_checkbox("Show Skeleton",showArmatureSkeleton)
 			if(ret[0]) {armatureviewer_set_showskeleton(ret[1])}
-				
-			
 				
 			imguigml_end_child()
 			imguigml_end_child()
