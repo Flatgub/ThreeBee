@@ -159,6 +159,9 @@ avIconTextureUVs.frame_rewind = sprite_get_uvs(sprDevToolsButtons, 3);
 avIconTextureUVs.jump_to_end = sprite_get_uvs(sprDevToolsButtons, 4);
 avIconTextureUVs.jump_to_start = sprite_get_uvs(sprDevToolsButtons, 5);
 
+armaturePos = {x: 0, y: 0, z: 0}
+armatureRot = {x: 0, y: 0, z: 0}
+
 
 /// @function open_armature_viewer_window()
 /// @description	open the armature viewer tool window
@@ -213,11 +216,13 @@ update_selected_armature = function(newSelection) {
 	armatureInst = new OBJA_Armature_Instance(selectedArmature)
 	armatureRenderer = new OBJA_ArmatureRenderComponent(id, armatureInst)
 	armatureRenderer.renderLayers = DEVTOOLS_DEVCAMERA_RENDERLAYER;
+	armatureRenderer.renderMatrix = matrix_build(armaturePos.x, armaturePos.y, armaturePos.z, armatureRot.x, armatureRot.y, armatureRot.z, 1,1,1)
 	
 	animationSkeletonRenderer = new OBJA_SkeletonRenderComponent(id, armatureInst)
 	animationSkeletonRenderer.customShader = global.DEFAULT_BASIC_SHADER 
 	animationSkeletonRenderer.renderLayers = DEVTOOLS_DEVCAMERA_RENDERLAYER;
 	animationSkeletonRenderer.dontRender = !showArmatureSkeleton;
+	animationSkeletonRenderer.renderMatrix = armatureRenderer.renderMatrix;
 	
 	if(selectedArmature != undefined) {
 		animationList = selectedArmature.list_all_animations();
@@ -226,6 +231,24 @@ update_selected_armature = function(newSelection) {
 	else {
 		selectedAnimation = undefined;
 		}
+	}
+	
+/// @function update_armature_pos(newx, newy, newz)
+update_armature_pos = function(newx, newy, newz) {
+	armaturePos.x = newx;
+	armaturePos.y = newy;
+	armaturePos.z = newz;
+	armatureRenderer.renderMatrix = matrix_build(armaturePos.x, armaturePos.y, armaturePos.z, armatureRot.x, armatureRot.y, armatureRot.z, 1,1,1)
+	animationSkeletonRenderer.renderMatrix = armatureRenderer.renderMatrix;
+	}
+	
+/// @function update_armature_rot(newx, newy, newz)
+update_armature_rot = function(newx, newy, newz) {
+	armatureRot.x = newx;
+	armatureRot.y = newy;
+	armatureRot.z = newz;
+	armatureRenderer.renderMatrix = matrix_build(armaturePos.x, armaturePos.y, armaturePos.z, armatureRot.x, armatureRot.y, armatureRot.z, 1,1,1)
+	animationSkeletonRenderer.renderMatrix = armatureRenderer.renderMatrix;
 	}
 	
 /// @function update_selected_animation(newSelection) 

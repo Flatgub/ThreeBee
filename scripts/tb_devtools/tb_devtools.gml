@@ -1,3 +1,27 @@
+function __tb_devtools_imgui_camerawidget() {
+	imguigml_begin_child("devtoolscamera",0,devToolsCameraSize,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
+			
+	//draw the devtools camera
+	imguigml_surface(devToolsCamera.targetSurface)
+			
+	//rewind the imgui cursor to the start of the child, so we overlap the camera
+	imguigml_set_cursor_pos(0,0)
+
+	//use an invisible button to capture the drag
+	imguigml_invisible_button("cameradragzone",devToolsCameraSize,devToolsCameraSize)
+	devToolsCameraPanelIsHovered = imguigml_is_item_hovered()
+	if(devToolsCameraPanelIsHovered && imguigml_is_mouse_dragging()) {
+		var delta = imguigml_get_mouse_drag_delta()
+		imguigml_reset_mouse_drag_delta()
+				
+		dtcAngle = angle_wrap(dtcAngle + delta[0]/2)
+		dtcPitch = clamp(dtcPitch + delta[1]/2, -85, 85) min(+1,85)
+		}
+
+	imguigml_end_child()
+	}
+
+
 function __tb_devtools_imgui_modelviewer() {
 	with(oThreeBeeDevTools) {
 		var winsizew = 760;
@@ -21,12 +45,7 @@ function __tb_devtools_imgui_modelviewer() {
 			imguigml_end_child()
 			
 			imguigml_same_line()
-			imguigml_begin_child("modelview",0,0,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
-			
-			imguigml_surface(devToolsCamera.targetSurface)
-			devToolsCameraPanelIsHovered = imguigml_is_item_hovered()
-			
-			imguigml_end_child()
+			__tb_devtools_imgui_camerawidget()
 			
 			showModelViewer = _modelViewWindow[1]
 			if(showModelViewer == false) {
@@ -39,7 +58,7 @@ function __tb_devtools_imgui_modelviewer() {
 	
 function __tb_devtools_imgui_armatureviewer() {
 	with(oThreeBeeDevTools) {
-		var winsizew = 760;
+		var winsizew = 900;
 		var winsizeh = window_get_height() - 100;
 		imguigml_set_next_window_size(winsizew,winsizeh,EImGui_Cond.Once)
 		var _armViewWindow = imguigml_begin("Armature Viewer",showArmatureViewer, EImGui_WindowFlags.NoCollapse);
@@ -68,14 +87,11 @@ function __tb_devtools_imgui_armatureviewer() {
 			imguigml_end_child()
 			imguigml_end_child()
 			
-			//DEV TOOLS CAMERA
+			#region [ CAMERA AND ANIM CONTROLS ]
 			imguigml_same_line()
-			imguigml_begin_child("",0,0,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
-			imguigml_begin_child("armatureview",0,devToolsCameraSize,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
+			imguigml_begin_child("",devToolsCameraSize,0,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
+			__tb_devtools_imgui_camerawidget()
 			
-			imguigml_surface(devToolsCamera.targetSurface)
-			devToolsCameraPanelIsHovered = imguigml_is_item_hovered()
-			imguigml_end_child()
 			
 			//ANIMATION CONTROLS
 			imguigml_begin_child("animationcontrols",0,0,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
@@ -146,6 +162,27 @@ function __tb_devtools_imgui_armatureviewer() {
 			if(ret[0]) {armatureviewer_set_showskeleton(ret[1])}
 				
 			imguigml_end_child()
+			imguigml_end_child()
+			#endregion
+			
+			imguigml_same_line()
+			imguigml_begin_child("rigmover",0,0,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
+			
+			imguigml_text("Position")
+			imguigml_push_item_width(imguigml_get_content_region_avail_width())
+			var ret = imguigml_drag_float3("##rigpos",armaturePos.x,armaturePos.y,armaturePos.z,0.5)
+			if(ret[0]) {update_armature_pos(ret[1],ret[2],ret[3])}
+			
+			imguigml_text("Rotation")
+			imguigml_push_item_width(imguigml_get_content_region_avail_width())
+			var ret = imguigml_drag_float3("##rigrot",armatureRot.x,armatureRot.y,armatureRot.z,1.0,-359,359)
+			if(ret[0]) {update_armature_rot(ret[1],ret[2],ret[3])}
+			
+			if(imguigml_button("Reset Pos/Rot")) {
+				update_armature_pos(0,0,0)
+				update_armature_rot(0,0,0)
+				}
+			
 			imguigml_end_child()
 			
 			showArmatureViewer = _armViewWindow[1]
