@@ -10,7 +10,7 @@ function __tb_devtools_imgui_camerawidget() {
 	//use an invisible button to capture the drag
 	imguigml_invisible_button("cameradragzone",devToolsCameraSize,devToolsCameraSize)
 	devToolsCameraPanelIsHovered = imguigml_is_item_hovered()
-	if(devToolsCameraPanelIsHovered && imguigml_is_mouse_dragging()) {
+	if(devToolsCameraPanelIsHovered && imguigml_is_mouse_dragging(0)) {
 		var delta = imguigml_get_mouse_drag_delta()
 		imguigml_reset_mouse_drag_delta()
 				
@@ -21,6 +21,11 @@ function __tb_devtools_imgui_camerawidget() {
 	imguigml_end_child()
 	}
 
+function __tb_devtools_imgui_texture_tooltip(_texture) {
+	imguigml_begin_tooltip()
+	imguigml_image(_texture,128,128)
+	imguigml_end_tooltip()
+	}
 
 function __tb_devtools_imgui_modelviewer() {
 	with(oThreeBeeDevTools) {
@@ -45,7 +50,45 @@ function __tb_devtools_imgui_modelviewer() {
 			imguigml_end_child()
 			
 			imguigml_same_line()
+			imguigml_begin_child("",devToolsCameraSize,0,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
 			__tb_devtools_imgui_camerawidget()
+			
+			imguigml_begin_child("modelinfo",0,0,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
+			imguigml_columns(2)
+			imguigml_set_column_width(-1,100)
+			
+			imguigml_text("File")
+			imguigml_next_column()
+			imguigml_text(selectedModel.parentFile)
+			imguigml_next_column()
+			
+			imguigml_text("Mesh Groups")
+			imguigml_next_column()
+			if(imguigml_selectable(array_length(selectedModel.mesh_groups))[0]) {
+				show_meshgroup_viewer();
+				}
+			imguigml_next_column()
+			
+			imguigml_text("Frozen?")
+			imguigml_next_column()
+			imguigml_text(selectedModel.frozen ? "Yes" : "No")
+			imguigml_next_column()
+			
+			imguigml_text("Texture")
+			imguigml_next_column()
+			if(selectedModel.texture == global.DEFAULT_TEXTURE) {imguigml_text_disabled("unassigned")}
+			else {imguigml_text(selectedModel.textureName)}
+			if(imguigml_is_item_hovered()) {
+				__tb_devtools_imgui_texture_tooltip(selectedModel.texture)
+				}
+			imguigml_next_column()						
+			
+			
+			
+			imguigml_end_child()
+			imguigml_end_child()
+			
+			
 			
 			showModelViewer = _modelViewWindow[1]
 			if(showModelViewer == false) {
@@ -54,6 +97,79 @@ function __tb_devtools_imgui_modelviewer() {
 			imguigml_end();
 			}
 		}
+	}
+	
+/// @context {oThreeBeeDevTools}
+function __tb_devtools_imgui_modelviewer_meshgroupviewer() {
+	if(showMeshgroupWindow) {
+		imguigml_set_next_window_pos(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), EImGui_Cond.Appearing,0,1)
+		imguigml_set_next_window_size(332, 300, EImGui_Cond.Appearing)
+		var _meshGroupWindow = imguigml_begin("MeshGroups",showMeshgroupWindow, EImGui_WindowFlags.NoCollapse | EImGui_WindowFlags.NoResize)
+		if(_meshGroupWindow[0]) {
+			var groups = selectedModel.mesh_groups
+			
+			imguigml_columns(3)
+			
+			imguigml_text("ID")
+			imguigml_set_column_width(-1, 32)
+			imguigml_next_column()
+			imguigml_set_column_width(-1, 200)
+			imguigml_text("Texture")
+			imguigml_next_column()
+			imguigml_set_column_width(-1, 100)
+			imguigml_next_column()
+			imguigml_separator()
+			
+			for(var i = 0; i < array_length(groups); i++) {
+				var group = groups[i];
+				//column 1, index
+				imguigml_text(string(i))
+				imguigml_next_column()
+				
+				//column 2, texture
+				if(group.texturename = "") {
+					imguigml_text_disabled("default")
+					if(imguigml_is_item_hovered()) {
+						imguigml_set_tooltip("This group render using the base texture assigned to the model")
+						}
+					}
+				else {
+					//TEXTURE doesn't exist
+					if(group.texture == undefined) {
+						imguigml_text_colored(1,0,0,1,group.texturename)
+						if(imguigml_is_item_hovered()) {
+							imguigml_begin_tooltip()
+							imguigml_text("The assigned texture \"")
+							imguigml_same_line(0,0)
+							imguigml_text_colored(1.0,1.0,0.4,1.0,group.texturename)
+							imguigml_same_line(0,0)
+							imguigml_text("\" isn't available.")
+							imguigml_text("Either the name is incorrect or the texture isn't loaded.")
+							imguigml_end_tooltip()
+							}
+						}
+					//TEXTURE does exist
+					else {
+						imguigml_text(group.texturename)
+						if(imguigml_is_item_hovered()) {
+							__tb_devtools_imgui_texture_tooltip(group.texture)
+							}
+						}
+					}
+				imguigml_next_column()
+				
+				//column 3, ???
+				imguigml_next_column()
+				}
+			
+		
+		
+			if(_meshGroupWindow[1] == false || !imguigml_is_window_focused()) {
+				close_meshgroup_viewer();
+				}
+			imguigml_end();
+		}
+	}
 	}
 	
 function __tb_devtools_imgui_armatureviewer() {

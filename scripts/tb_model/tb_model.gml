@@ -1,9 +1,11 @@
 #region [ Data Structures ]
 function Model() constructor {
 	name = "undefined";
+	parentFile = ""; //the file this model came from
 	mesh_groups = [];
 	frozen = false;
-	texture = global.DEFAULT_TEXTURE;
+	texture = global.DEFAULT_TEXTURE; //fallback texture
+	textureName = "unassigned"
 	textureFrame = 0;
 	
 	/// @function add_meshgroup(group)
@@ -11,15 +13,39 @@ function Model() constructor {
 		array_push(mesh_groups, _mg);
 		}
 	
+	/// @function bind_texture(name)
+	/// @param	{string}	name	the name of the sprite to bind this model to
+	function bind_texture(_name) {
+		textureName = _name;
+		var spr = asset_get_index(_name);
+		if(spr == -1) {debug_alert("tried to bind to texture " + _name + " that can't be found!",CONSOLE_ERROR_COL); return;}
+		texture = sprite_get_texture(spr, 0)
+		}
+	
+	/// @function bind_texture_sprite(sprite)
+	/// @param	{Asset.GMSprite}	sprite	the sprite to bind this model to
+	function bind_texture_sprite(_spr) {
+		texture = sprite_get_texture(_spr, 0)
+		textureName = sprite_get_name(_spr);
+		}
+		
+	/// @function bind_texture_direct(tex, name)
+	/// @param	{Pointer.Texture}	tex		the texture page to bind this model to
+	/// @param	{string}			name	the name to show for this texture
+	function bind_texture_direct(_tex, _name) {
+		texture = _tex;
+		textureName = _name;
+		}
+	
 	/// @function submit(mode, fallback)
-	/// @param	{real}	mode		render mode, like pr_trianglelist
-	/// @param	{real}	fallback	the id of the texture to use for any mesh groups which dont have a texture assigned
+	/// @param	{Constant.PrimitiveType}	mode		render mode
+	/// @param	{Pointer.Texture}			[fallback]	the texture to use instead of the model's base texture for any mesh groups which dont have a texture assigned
 	function submit(mode, fallback_tex) {
+		fallback_tex ??= texture;
 		var groups = mesh_groups;
 		for(var i = 0; i < array_length(groups); i++) {
 			var group = groups[i];
-			var tex = group.texture == undefined ? fallback_tex : group.texture;
-			vertex_submit(group.vertexBuffer, mode, tex);
+			vertex_submit(group.vertexBuffer, mode, group.texture ?? fallback_tex);
 			}
 		}
 		
@@ -35,7 +61,6 @@ function Model() constructor {
 		}
 	}
 
-
 function _MeshGroup() constructor {
 	name = "";
 	texturename = "";
@@ -46,21 +71,22 @@ function _MeshGroup() constructor {
 	/// @function bind_texture(name)
 	/// @param	{string}	name	the name of the sprite to bind this meshgroup to
 	function bind_texture(_name) {
+		texturename = _name;
 		var spr = asset_get_index(_name);
 		if(spr == -1) {debug_alert("tried to bind to texture " + _name + " that can't be found!",CONSOLE_ERROR_COL); return;}
 		texture = sprite_get_texture(spr, 0)
-		texturename = _name;
 		}
 	
-	/// @function bind_texture_sprite(index)
-	/// @param	{real}	index	the index of the sprite to bind this meshgroup to
+	/// @function bind_texture_sprite(sprite)
+	/// @param	{Asset.GMSprite}	sprite	the sprite to bind this meshgroup to
 	function bind_texture_sprite(_spr) {
 		texture = sprite_get_texture(_spr, 0)
 		texturename = sprite_get_name(_spr);
 		}
 		
-	/// @function bind_texture_direct(tex)
-	/// @param	{real}	tex		the index of the texture page to bind this meshgroup to
+	/// @function bind_texture_direct(tex, name)
+	/// @param	{Pointer.Texture}	tex		the texture page to bind this meshgroup to
+	/// @param	{string}			name	the name to show for this texture
 	function bind_texture_direct(_tex, _name) {
 		texture = _tex;
 		texturename = _name;
@@ -86,6 +112,7 @@ function _MeshGroup() constructor {
 /// @param {string} path				the path of the file
 /// @param {string} [name]				the custom name to give the model
 /// @param {bool}	[freeze_on_load]	whether to immediately freeze the meshes
+/// @returns	{Struct.Model | Array<Struct.Model>}
 function model_load_obj(path, name, freeze_on_load=false) {
 	name = name ?? path;
 
@@ -223,6 +250,10 @@ function model_load_obj(path, name, freeze_on_load=false) {
 	
 	var modelOutput = [];
 	
+	//get filename on its own
+	var split = string_split(path,"\\"); // split on directory markers
+	var fname = split[ array_length(split)-1] //grab only the last component (the filename)
+	
 	//convert each object list collection into a model
 	for(var oi = 0; oi < ds_list_size(objects); oi++) {
 		var object = objects[| oi];
@@ -236,6 +267,8 @@ function model_load_obj(path, name, freeze_on_load=false) {
 			
 		var multimesh = new Model();
 		multimesh.name = modelname;
+		multimesh.parentFile = fname;
+		multimesh.frozen = freeze_on_load;
 			
 		//make a submesh for each grouping
 		for(var gi = 0; gi < ds_list_size(object.groupList); gi++) {
@@ -284,8 +317,6 @@ function model_load_obj(path, name, freeze_on_load=false) {
 			if(freeze_on_load) {submesh.freeze()}
 			multimesh.add_meshgroup(submesh);
 			buffer_delete(modelBuffer);
-			
-			//debug_log("loaded group '" + groupname + "', bound to " + texname,c_gray)
 			}
 			
 		ds_map_add(global.LOADED_MODELS,modelname,multimesh);
@@ -306,12 +337,10 @@ function model_load_obj(path, name, freeze_on_load=false) {
 	
 	//if the file only contained a single model, return just that model
 	if(array_length(modelOutput) == 1) {
-		//printf("doing return singular");
 		return modelOutput[0];
 		}
 
 	//otherwise, return an array of all the models contained within the 
-	//printf("doing return multiple");
 	return modelOutput;
 	}
 	

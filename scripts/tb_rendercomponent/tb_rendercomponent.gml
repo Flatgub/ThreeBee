@@ -52,6 +52,7 @@ function RenderComponent(_parent,_static, _transparent) constructor{
 ///@param {bool}			_transparent
 function ModelRenderComponent(_parent, _model, _static, _transparent) : RenderComponent(_parent, _static, _transparent) constructor {
 	renderModel = _model;
+	renderTexture = undefined; //used to override the base texture of the mesh
 	
 	customRenderFunction = function() {
 		if(!isStatic) {matrix_set(matrix_world,renderMatrix);}

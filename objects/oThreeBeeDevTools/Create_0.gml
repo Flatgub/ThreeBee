@@ -86,6 +86,7 @@ close_tool_windows = function() {
 #endregion
 
 #region [ MODEL VIEWER ]
+selectedModel = undefined;
 viewedModel = undefined;
 modelViewerSelectedModel = 0;
 modelList = [];
@@ -95,10 +96,11 @@ open_model_viewer_window = function() {
 	showModelViewer = true;
 	refresh_model_list();
 	
-	create_dev_tools_camera();
-	
 	viewedModel = new ModelRenderComponent(id, global.DEFAULT_MODEL, false, false)
 	viewedModel.renderLayers = DEVTOOLS_DEVCAMERA_RENDERLAYER
+	
+	create_dev_tools_camera();
+	update_selected_model(0)
 	
 	show_dev_tools_grid();
 	}
@@ -110,6 +112,7 @@ close_model_viewer_window = function() {
 	
 	viewedModel.cleanup();	
 	viewedModel = undefined;
+	selectedModel = undefined;
 	
 	hide_dev_tools_grid()
 	}
@@ -124,13 +127,24 @@ refresh_model_list = function() {
 update_selected_model = function(newSelection) {
 	modelViewerSelectedModel = newSelection;
 	var model = global.LOADED_MODELS[? modelList[modelViewerSelectedModel]];
+	selectedModel = model;
 	viewedModel.renderModel = model
-	viewedModel.renderTexture = model.texture
-	if(model.texture == global.DEFAULT_TEXTURE) {
-		viewedModel.renderTexture = sprite_get_texture(texWhite,0)
-		}
-	//texture = global.DEFAULT_TEXTURE
 	}
+
+#region < MESH GROUP VIEWER >
+showMeshgroupWindow = false;
+show_meshgroup_viewer = function() {
+	showMeshgroupWindow = true
+	printf("show_meshgroup_viewer()")
+	}
+	
+close_meshgroup_viewer = function() {
+	if(showMeshgroupWindow) {
+		showMeshgroupWindow = false;
+		printf("close_meshgroup_viewer()")
+		}
+	}
+#endregion
 #endregion
 
 #region [ ARMATURE VIEWER ]

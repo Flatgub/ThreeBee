@@ -193,13 +193,3 @@ function array_filter_first_index(_array, _testfunc) {
 		}
 	return -1;
 	}
-
-/// @function array_foreach(array, function)
-/// @description executes the function for each element of the array from start to end
-//				 function must take the form func(element)
-function array_foreach(_array,_func) {
-	var size = array_length(_array);
-	for(var i = 0; i < size; i++) {
-		_func(_array[@ i]);
-		}
-	}

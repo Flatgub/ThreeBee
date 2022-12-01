@@ -39,7 +39,10 @@ if(showDevTools && imguigml_ready()) {
 		}
 		
 		
-	if(showModelViewer) {__tb_devtools_imgui_modelviewer()}
+	if(showModelViewer) {
+		__tb_devtools_imgui_modelviewer()
+		__tb_devtools_imgui_modelviewer_meshgroupviewer()
+		}
 	else if(showArmatureViewer) {
 		__tb_devtools_imgui_armatureviewer()
 		if(playingSelectedAnimation && armatureInst != undefined) {

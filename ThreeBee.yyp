@@ -55,6 +55,7 @@
     {"id":{"name":"tb_retroshader_unlit","path":"scripts/tb_retroshader_unlit/tb_retroshader_unlit.yy",},"order":0,},
     {"id":{"name":"fntConsole","path":"fonts/fntConsole/fntConsole.yy",},"order":0,},
     {"id":{"name":"oLight","path":"objects/oLight/oLight.yy",},"order":0,},
+    {"id":{"name":"texMC_128","path":"sprites/texMC_128/texMC_128.yy",},"order":1,},
     {"id":{"name":"sprAudioSource","path":"sprites/sprAudioSource/sprAudioSource.yy",},"order":3,},
     {"id":{"name":"tb_bbox","path":"scripts/tb_bbox/tb_bbox.yy",},"order":0,},
     {"id":{"name":"lib_benchmark","path":"scripts/lib_benchmark/lib_benchmark.yy",},"order":4,},
