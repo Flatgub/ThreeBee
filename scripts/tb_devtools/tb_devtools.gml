@@ -281,6 +281,8 @@ function __tb_devtools_imgui_armatureviewer() {
 			imguigml_end_child()
 			#endregion
 			
+			
+			/// RIGHT SIDE PANEL
 			imguigml_same_line()
 			imguigml_begin_child("rigmover",0,0,devToolsShowChildBorders,EImGui_WindowFlags.HorizontalScrollbar)
 			
@@ -298,8 +300,10 @@ function __tb_devtools_imgui_armatureviewer() {
 				update_armature_pos(0,0,0)
 				update_armature_rot(0,0,0)
 				}
+				
+			imguigml_separator()
 			
-			imguigml_end_child()
+			imguigml_text(string("Cached Samples: {0}",array_length(armatureInst.activeAnimation.cachedSamples)))
 			
 			showArmatureViewer = _armViewWindow[1]
 			if(showArmatureViewer == false) {

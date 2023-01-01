@@ -2,26 +2,29 @@ function RetroShader_Lit() : TBShader() constructor {
 	
 	shader = shrRetroLit;
 	
-	//LIGHTING
+	// LIGHTING
 	ambientLightColourUniform = shader_get_uniform(shader,"u_vAmbientLightColour")
 	lightPosUniform = shader_get_uniform(shader,"u_vLightPosition");
 	lightColourUniform = shader_get_uniform(shader,"u_vLightColour");
 	lightStrengthUniform =  shader_get_uniform(shader,"u_fLightStrength");
 	lightMixUniform =  shader_get_uniform(shader,"u_fLightMix");
 	
-	//FOG
+	// FOG
 	litFogStartUniform = shader_get_uniform(shader,"u_fFogStart");
 	litFogEndUniform = shader_get_uniform(shader,"u_fFogEnd");
 	litFogColourUniform = shader_get_uniform(shader,"u_vFogColour")
+	fogStart = 200;
+	fogEnd = 400;
+	fogColour = [0,0,0];
 	
-	//VERTEX CRUNCH
-	geoResolution = 5;
+	// VERTEX CRUNCH
+	geoResolution = 10;
 	litGeoResUniform = shader_get_uniform(shader,"u_fGeoResolution")
 	
-	//DITHERING
+	// DITHERING
 	ditherMatrixUniform = shader_get_uniform(shader,"u_fDitherMatrix");
 	
-	//BLEND
+	// BLEND
 	litBlendUniform = shader_get_uniform(shader,"u_vBlend")
 	
 	hasPerComponentUniforms = true;
@@ -39,9 +42,9 @@ function RetroShader_Lit() : TBShader() constructor {
 		shader_set_uniform_f_array(lightStrengthUniform,global.CURRENT_CAMERA.activeLightStrengths);
 		
 		//FOG
-		shader_set_uniform_f(litFogStartUniform,global.FOG_START);
-		shader_set_uniform_f(litFogEndUniform,global.FOG_END);
-		shader_set_uniform_f_array(litFogColourUniform,global.FOG_COLOUR);
+		shader_set_uniform_f(litFogStartUniform,fogStart);
+		shader_set_uniform_f(litFogEndUniform,fogEnd);
+		shader_set_uniform_f_array(litFogColourUniform,fogColour);
 		
 		//vertex distortion
 		shader_set_uniform_f(litGeoResUniform,geoResolution);

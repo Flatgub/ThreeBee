@@ -1,4 +1,4 @@
-instance_create_depth(0, 0, depth-10, imgui);
+instance_create_depth(0, 0, -9999, imgui);
 imguigml_add_font_from_ttf("pixel04b24.ttf", 12.0);
 
 #macro DEVTOOLS_DEVCAMERA_VIEWID 7
@@ -6,7 +6,7 @@ imguigml_add_font_from_ttf("pixel04b24.ttf", 12.0);
 
 devToolsShowChildBorders = false;
 
-showDevTools = true;
+global.showDevTools = true;
 showModelViewer = false;
 showArmatureViewer = false;
 
@@ -321,8 +321,8 @@ armatureviewer_set_animation_speed = function(value) {
 
 
 dev_register_command("tb_toggle_devtools", function(args) {
-	showDevTools = !showDevTools
-	debug_log("devtools " + (showDevTools ? "enabled" : "disabled"))
+	global.showDevTools = !global.showDevTools
+	debug_log("devtools " + (global.showDevTools ? "enabled" : "disabled"))
 	}, 0, "toggles the devtools", "");
 	
 

@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "example_input",
+  "name": "tb_global",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Example",
-    "path": "folders/Example.yy",
+    "name": "Core",
+    "path": "folders/ThreeBee/Core.yy",
   },
 }

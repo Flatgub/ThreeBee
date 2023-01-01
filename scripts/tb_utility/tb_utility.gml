@@ -79,7 +79,7 @@ function col_flip(col) {
 /// @function col_to_float_array(col)
 /// @param col
 function col_to_float_array(col) {
-	return [($FF & col)/255,($FF00 & col)/255,($FF0000 & col)/255];
+	return [($FF & col)/255,(($FF00 >> 8) & col )/255,(($FF0000 >> 16) & col)/255];
 }
 
 /// @function list_remove(list, value)
@@ -151,7 +151,7 @@ function foreach(_list, _func) {
 	for(var i = 0; i < ds_list_size(_list); i++) {
 		_func(_list[| i]);
 		}
-	}
+	} 
 	
 /// @function foreach_i(list, function)
 /// @description executes the function for each element of the list from start to end, and provides the index as well
@@ -192,4 +192,11 @@ function array_filter_first_index(_array, _testfunc) {
 		if(_testfunc(_array[@ i])) {return i}
 		}
 	return -1;
+	}
+
+
+///@function set_room_bg_col(colour)
+///@param {Constant.Colour}	colour	the colour to set the room bg to
+function set_room_bg_col(_colour) {
+	layer_background_blend(layer_background_get_id("Background"), _colour);
 	}

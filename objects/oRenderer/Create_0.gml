@@ -9,6 +9,8 @@
 
 #macro CULL_DIRECTION cull_counterclockwise
 
+
+
 define_vertex_format()
 
 // ### RENDERING ###
@@ -41,10 +43,10 @@ global.LISTENER_CAMERA = undefined;
 global.ALL_LIGHTS = ds_list_create();
 global.AMBIENT_LIGHT_COLOUR = [0.01,0.01,0.01];
 
+//TODO: fog is a shader property, not a global property, these shouldn't be here
 global.FOG_COLOUR = [0,0,0];
 global.FOG_START = 200;
 global.FOG_END = 400;
-
 
 // ### MODELS ###
 global.LOADED_MODELS = ds_map_create();

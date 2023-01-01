@@ -14,6 +14,11 @@ function __compare_layers(_component, _camera) {
 	}
 
 function render_scene() {
+	
+	//enable z and alpha testing
+	gpu_set_ztestenable(true);
+	gpu_set_alphatestenable(true);
+	gpu_set_alphatestref(5);
 
 	var transparent = ds_priority_create();
 	var depthignore = ds_list_create();
@@ -214,9 +219,10 @@ function render_scene() {
 	ds_list_destroy(depthignore);
 	#endregion
 
-	gpu_set_ztestenable(true)
+	//return to default
+	gpu_set_ztestenable(false);
+	gpu_set_alphatestenable(false);
 	
-
 	shader_reset();
 
 	ds_priority_destroy(transparent)

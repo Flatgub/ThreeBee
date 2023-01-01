@@ -22,9 +22,9 @@ function RenderComponent(_parent,_static, _transparent) constructor{
 	customRenderFunction = undefined;
 
 	dontRender = false;
-	colour = c_white;
+	colour = c_white; //colour tinting
 	alpha = 1;
-	lightMix = 1;
+	lightMix = 1; //how affected by lighting the mesh is. zero means the object is always fullbright
 	z = 0;
 	ignoreDepth = false;
 	renderLayers = false;

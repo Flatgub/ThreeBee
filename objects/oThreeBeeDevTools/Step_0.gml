@@ -1,4 +1,4 @@
-if(showDevTools && imguigml_ready()) {
+if(global.showDevTools && imguigml_ready()) {
 	//header bar
 	if(imguigml_begin_main_menu_bar()) {
 		

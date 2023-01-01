@@ -18,7 +18,7 @@ for(var i = 0; i < array_length(meshes); i++) {
 	meshes[i].freeze();
 	meshes[i].bind_texture_sprite(sprPistolTex)
 	//meshes[i].texture = sprite_get_texture(sprPistolTex,0)
-	printf("loaded '{0}'",meshes[i].name);
+	show_debug_message("loaded '{0}'",meshes[i].name);
 	}
 benchmark_end(b)
 	
@@ -59,6 +59,8 @@ paused = true;
 showLabels = false;
 
 renderer = new OBJA_ArmatureRenderComponent(id, armInst)
+
+create_light(16,16,16,c_white,500)
 
 #endregion
 
@@ -132,15 +134,3 @@ dev_register_command("set_sample_interval",function(args) {
 		debug_log("ERR: interval must be an integer",c_red)
 		}
 	},1,"set the animation cache sample interval","interval")
-
-
-var a = {bee: "bap", boo: 8.39, bop: [1,2,3,{hello: "world"}]}
-var out = json_stringify(a);
-var reconstruct = json_parse(out)
-show_debug_message(out)
-show_debug_message(reconstruct)
-
-out = json_beautify(out)
-var reconstruct = json_parse(out)
-show_debug_message(out)
-show_debug_message(reconstruct)

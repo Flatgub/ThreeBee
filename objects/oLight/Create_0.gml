@@ -1,7 +1,5 @@
 /// @description Light Instance Creation
 
-#macro DEBUG_SHOW_LIGHTS true
-
 ds_list_add(global.ALL_LIGHTS,self); //add self to known lights
 
 z = 0;
