@@ -79,7 +79,7 @@ function col_flip(col) {
 /// @function col_to_float_array(col)
 /// @param col
 function col_to_float_array(col) {
-	return [($FF & col)/255,(($FF00 >> 8) & col )/255,(($FF0000 >> 16) & col)/255];
+	return [color_get_red(col)/255, color_get_green(col)/255, color_get_blue(col)/255]
 }
 
 /// @function list_remove(list, value)
