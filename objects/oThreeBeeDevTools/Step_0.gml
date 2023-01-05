@@ -45,6 +45,7 @@ if(global.showDevTools && imguigml_ready()) {
 		}
 	else if(showArmatureViewer) {
 		__tb_devtools_imgui_armatureviewer()
+		__tb_devtools_imgui_armatureviewer_boneviewer()
 		if(playingSelectedAnimation && armatureInst != undefined) {
 			armatureInst.update();
 			if(armatureInst.animationFinished && !armatureInst.animationLoop) {

@@ -15,11 +15,13 @@ function OBJA_Bone(_id, _name, _armature, _head, _axis, _angle, _length) constru
 	__localHeadDQ = [0,0,0,1,0,0,0,0]
 	__headScaleMatrix = matrix_build(0,0,0,0,0,0,1,length,1);
 	
+	renderHighLighted = false
+	
 	render = method(self,function(_matrix) {
-		//var mat = matrix_multiply(dq_to_matrix(__localHeadDQ),_matrix)
-		//mat = matrix_multiply(dq_to_matrix(poseDQ), mat)
+		var tex = renderHighLighted ? sprite_get_texture(texRed, 0) : -1
+		
 		matrix_set(matrix_world,_matrix);
-		vertex_submit(global.__BONE_BOX_MESH,pr_linelist,-1);
+		vertex_submit(global.__BONE_BOX_MESH,pr_linelist,tex);
 		
 		var mat = matrix_multiply(__headScaleMatrix,_matrix)
 		matrix_set(matrix_world,mat);

@@ -8,8 +8,6 @@ postFXPanel = undefined;
 
 tb_init()
 
-tb_set_postfx(true, new PostFXShader())
-
 instance_create_depth(0,0,-10000,oDevConsole);
 
 instance_create_layer(0,0,"Instances",oRenderer);

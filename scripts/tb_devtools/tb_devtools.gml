@@ -26,6 +26,28 @@ function __tb_devtools_imgui_texture_tooltip(_texture) {
 	imguigml_image(_texture,128,128)
 	imguigml_end_tooltip()
 	}
+	
+function __tb_devtools_imgui_dualquaternion(_dq, _id) {
+	var windowWidth = imguigml_get_window_width();
+	imguigml_begin_child(string("##{0}",_id),windowWidth,16)
+	imguigml_columns(2)
+	imguigml_text(string("{0}, {1}, {2}, {3}",_dq[0],_dq[1],_dq[2],_dq[3]));
+	imguigml_next_column()
+	imguigml_text(string("{0}, {1}, {2}, {3}",_dq[4],_dq[5],_dq[6],_dq[7]));
+	imguigml_end_child()
+	}
+	
+function __tb_devtools_imgui_matrix(_matrix, _id) {
+	var windowWidth = imguigml_get_window_width();
+	imguigml_begin_child(string("##{0}", _id),windowWidth,16*4)
+	imguigml_columns(4)
+	for(var i = 0; i < 16; i++) {
+		//imguigml_push_item_width(32)
+		imguigml_text(_matrix[i])
+		imguigml_next_column()
+		}
+	imguigml_end_child()
+	}
 
 function __tb_devtools_imgui_modelviewer() {
 	with(oThreeBeeDevTools) {
@@ -162,8 +184,6 @@ function __tb_devtools_imgui_modelviewer_meshgroupviewer() {
 				imguigml_next_column()
 				}
 			
-		
-		
 			if(_meshGroupWindow[1] == false || !imguigml_is_window_focused()) {
 				close_meshgroup_viewer();
 				}
@@ -305,9 +325,81 @@ function __tb_devtools_imgui_armatureviewer() {
 			
 			imguigml_text(string("Cached Samples: {0}",array_length(armatureInst.activeAnimation.cachedSamples)))
 			
+			if(imguigml_button("Show Bone Viewer")) {
+				open_boneviewer_window()
+				}
+			
 			showArmatureViewer = _armViewWindow[1]
 			if(showArmatureViewer == false) {
 				close_armature_viewer_window()
+				}
+			imguigml_end();
+			}
+		}
+	}
+	
+function __tb_devtools_imgui_armatureviewer_boneviewer() {
+	//showBoneViewerWindow
+	if(showBoneViewerWindow) {
+		var windowWidth = 360;
+		var windowHeight = window_get_height() - 100;
+		var windowpos = imguigml_get_window_pos();
+		imguigml_set_next_window_pos(windowpos[0]+900, windowpos[1],EImGui_Cond.Appearing)
+		imguigml_set_next_window_size(windowWidth, windowHeight, EImGui_Cond.Appearing)
+		var _boneViewerWindow = imguigml_begin("Bones",showBoneViewerWindow, EImGui_WindowFlags.NoCollapse)
+		if(_boneViewerWindow[0])  {
+			
+			// BONES LIST
+			imguigml_push_item_width(windowWidth)
+			var ret = imguigml_list_box("",selectedBoneIndex,boneViewerList,10)
+			if(ret[0]) {
+				boneviewer_select_bone(ret[1])
+				}
+				
+			imguigml_separator()
+			
+			ret = imguigml_checkbox("Show calculated matrix?",showMatrixInsteadOfDQ)
+			if(ret[0]) {showMatrixInsteadOfDQ = ret[1]};
+			
+			var currentSample = armatureInst.currentAnimationSample;
+			var cachedBone = currentSample.cachedBones[selectedBoneIndex];
+			
+			if(showMatrixInsteadOfDQ) {
+				var mat = dq_to_matrix(cachedBone)
+				__tb_devtools_imgui_matrix(mat, "cachedBoneMatrix")
+				}
+			else {
+				__tb_devtools_imgui_dualquaternion(cachedBone, "cachedBoneDQ")
+				}
+				
+			imguigml_separator()
+			
+			if(array_length(selectedBonePairings) > 0) {
+				imguigml_text("Meshes:")
+				
+				for(var i = 0; i < array_length(selectedBonePairings); i++) {
+					var pair = selectedBonePairings[i];
+					imguigml_text(pair.meshname)
+					imguigml_text("Matrix Offset:")
+					if(showMatrixInsteadOfDQ) {
+						var mat = dq_to_matrix(pair.boneToMeshDQ)
+						__tb_devtools_imgui_matrix(mat, pair.meshname + "matrix")
+						}
+					else {
+						__tb_devtools_imgui_dualquaternion(pair.boneToMeshDQ, pair.meshname + "dq")
+						}
+					imguigml_separator()
+					}
+				}
+			else {
+				imguigml_text_disabled("This bone has no attached meshes")
+				}
+			
+			
+							
+			
+			if(_boneViewerWindow[1] == false) {
+				close_boneviewer_window();
 				}
 			imguigml_end();
 			}

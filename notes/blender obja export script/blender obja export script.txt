@@ -1,0 +1,226 @@
+bl_info = {
+    "name": "Obj Animation Export",
+    "blender": (2, 90, 0),
+    "category": "Import-Export",
+}
+
+import bpy
+import math
+import re
+
+precision = 6
+strConversionBlock = "%."+str(precision)+"f"
+
+def float_to_string(float):
+    global strConversionBlock
+    return strConversionBlock % float
+
+def vec2_to_string(vec2):
+    global strConversionBlock
+    one = strConversionBlock % vec2[0]
+    two = strConversionBlock % vec2[1]
+    return "%s %s" % (one, two)
+    
+def vec3_to_string(vec3):
+    global strConversionBlock
+    one = strConversionBlock % vec3[0]
+    two = strConversionBlock % vec3[1]
+    three = strConversionBlock % vec3[2]
+    return "%s %s %s" % (one, two, three)
+
+class OBJA_Export(bpy.types.Operator):
+    bl_idname = "export.obja"
+    bl_label = "Export OBJA"
+    
+    filepath = bpy.props.StringProperty(subtype="FILE_PATH")
+    
+    easeDict = {
+        "AUTO": 1,
+        "EASE_IN": 1,
+        "EASE_OUT": 2,
+        "EASE_IN_OUT": 3
+        }
+
+    interpDict = {
+        "CONSTANT": 0,
+        "LINEAR": 1,
+        "BEZIER": 2,
+        "SINE": 3,
+        "QUAD": 4,
+        "CUBIC": 5,
+        "QUART": 6,
+        "QUINT": 7,
+        "EXPO": 8,
+        "CIRC": 9,
+        "BACK": 10,
+        "BOUNCE": 11,
+        "ELASTIC": 12
+        }
+        
+    chanTypeDict = {
+        "location": "loc",
+        "rotation_quaternion": "rot",
+        "scale": "scale"
+        }
+        
+    chanAxisDict = {
+        "loc": ["x","y","z"],
+        "rot": ["w","x","y","z"],
+        "scale": ["x","y","z"]
+        }
+    
+    @classmethod
+    def poll(cls, context):
+        return context.object is not None
+    
+    def execute(self, context):        
+        obj = context.active_object
+        
+        if obj.type == 'MESH':
+            vergroups = obj.vertex_groups
+            armmod = obj.modifiers[0]
+            arm = armmod.object
+        elif obj.type == 'ARMATURE':
+            arm = obj
+        
+        scene = context.scene
+                    
+        boneIDs = {}
+        knownBones = {}
+        
+        out = open(self.filepath, "w")
+            
+        out.write("# Obj Animatio n File: %s.obja\n" % arm.name)
+        out.write("# @Flatgub\n\n")
+            
+        out.write("# Bone Definitions \n")
+        numbones = len(arm.data.bones)
+        rootbone = "";
+        
+        for boneindex in range(0,numbones):
+            bone = arm.data.bones[boneindex]
+            boneIDs[boneindex] = bone.name
+            boneIDs[bone.name] = boneindex
+            knownBones[bone.name] = bone
+            knownBones[boneindex] = bone
+
+            rotquat = bone.matrix.to_quaternion()
+            boneaxis, boneangle = rotquat.to_axis_angle()
+            
+            if boneindex == 0:
+                rootbone = bone
+            
+            head = vec3_to_string(bone.head)
+            axis = vec3_to_string(boneaxis)
+            roll = float_to_string(boneangle)
+            length = float_to_string(bone.length)
+
+            out.write("b %s %s %s %s %s %s\n" % (boneindex, bone.name, head, axis, roll, length))
+
+        # bone relations
+        out.write("\n# Bone Relations\n")
+        for boneindex in range(0,numbones):
+            bone = arm.data.bones[boneindex]
+            parent = ""
+            if(bone.parent is not None): parent = boneIDs[bone.parent.name]
+            out.write("br %s %s\n" % (boneindex,parent))
+
+        # model-bone pairing
+        out.write("\n# Model to Bone Pairing\n")
+        for obj in bpy.context.selected_objects:
+            if obj.type != 'MESH': continue
+            #find what bone the mesh belongs to
+            vertgroups = obj.vertex_groups
+            vert = obj.data.vertices[0]
+            vertbone = vert.groups[0].group
+            
+            #find the bone and the attached mesh relative to the armature
+            bone = knownBones[vertbone]
+            objLocalToArmature = obj.matrix_local
+            boneLocalToArmature = bone.matrix_local
+            
+            #find the local difference between the bone and the mesh
+            boneInverseMat = boneLocalToArmature.inverted()
+            boneToMesh = boneInverseMat @ objLocalToArmature
+            
+            #decompose and store
+            trans, quat, s = boneToMesh.decompose()
+            rotaxis, rotangle = quat.to_axis_angle()
+                
+            out.write("mp %s %s %s %s %s\n" % (obj.name, vertbone, vec3_to_string(trans), vec3_to_string(rotaxis), float_to_string(rotangle)))
+            
+        if(arm.animation_data is not None):                
+            # animation block
+            out.write("\n# Animations\n")
+            
+            for anim in bpy.data.actions:
+                # only include animations which share a group with the root bone
+                if(rootbone.name not in anim.groups.keys()):
+                    continue
+
+                framelen = math.ceil(anim.frame_range[1])
+                fps = math.ceil(scene.render.fps)
+                out.write("a %s %s %s\n" % (anim.name, framelen, fps))
+                out.write("\n")
+
+                # fcurve group
+                fcurves = anim.fcurves
+                fcurvegroups = anim.groups
+                for curvegroup in fcurvegroups:
+                    out.write("fcg %s\n" % boneIDs[curvegroup.name])
+                    for curve in curvegroup.channels:
+                        datapathchunks = curve.data_path.split(".")
+                        print(curve.data_path)
+                        
+                        channel_type = self.chanTypeDict[datapathchunks[-1]]
+                        #axisdict = chanAxisDict[channel_type]
+                        channel_mod = curve.array_index#axisdict[curve.array_index]
+
+                        out.write("fc %s %s\n" % (channel_type,channel_mod))
+                        # keyframes
+                        for kf in curve.keyframe_points:
+                            frame = float_to_string(kf.co[0])
+                            value = float_to_string(kf.co[1])
+                            ease = kf.easing#easeDict[kf.easing]
+                            interp = kf.interpolation#interpDict[kf.interpolation]
+                            handles = ""
+                            if interp == "BEZIER":
+                                lhstr = vec2_to_string(kf.handle_left)
+                                rhstr = vec2_to_string(kf.handle_right)
+                                handles = "%s %s" % (lhstr,rhstr)
+                            
+                            out.write("kf %s %s %s %s %s\n" % (frame,value,ease,interp,handles))
+                    out.write("\n")
+            
+        out.close()
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        obj = context.active_object
+        
+        if obj.type == 'MESH':
+            vergroups = obj.vertex_groups
+            armmod = obj.modifiers[0]
+            arm = armmod.object
+        elif obj.type == 'ARMATURE':
+            arm = obj
+            
+        self.filepath = arm.name+".obja"
+        context.window_manager.fileselect_add(self)
+        return {'RUNNING_MODAL'}
+
+def menu_func(self, context):
+    self.layout.operator_context = 'INVOKE_DEFAULT'
+    self.layout.operator(OBJA_Export.bl_idname, text="Wavefront Animation Export (.obja)")
+
+def register():
+    # Register and add to the file selector
+    bpy.utils.register_class(OBJA_Export)
+    bpy.types.TOPBAR_MT_file_export.append(menu_func)
+
+def unregister():
+    bpy.utils.unregister_class(OBJA_Export)
+    bpy.types.TOPBAR_MT_file_export.remove(menu_func)
+
+if __name__ == "__main__":
+    register()

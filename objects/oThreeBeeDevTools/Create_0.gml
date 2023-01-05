@@ -176,7 +176,6 @@ avIconTextureUVs.jump_to_start = sprite_get_uvs(sprDevToolsButtons, 5);
 armaturePos = {x: 0, y: 0, z: 0}
 armatureRot = {x: 0, y: 0, z: 0}
 
-
 /// @function open_armature_viewer_window()
 /// @description	open the armature viewer tool window
 open_armature_viewer_window = function() {
@@ -196,6 +195,7 @@ open_armature_viewer_window = function() {
 close_armature_viewer_window = function() {
 	showArmatureViewer = false;
 	destroy_dev_tools_camera()
+	close_boneviewer_window()
 	
 	armatureRenderer.cleanup();
 	animationSkeletonRenderer.cleanup();
@@ -316,7 +316,63 @@ armatureviewer_set_animation_speed = function(value) {
 	animationSpeed = value;
 	armatureInst.animationSpeed = animationSpeed;
 	}
+	
+#region < BONE VIEWER >
+showBoneViewerWindow = false;
+selectedBoneIndex = 0;
+selectedBone = undefined;
+boneViewerList = ["hello","world"];
+showMatrixInsteadOfDQ = false;
+selectedBonePairings = [];
+
+function open_boneviewer_window() {
+	showBoneViewerWindow = true;
+	armatureviewer_set_showskeleton(true);
+	boneviewer_update_bonelist();
+	boneviewer_select_bone(0);
+	}
+	
+function close_boneviewer_window() {
+	showBoneViewerWindow = false;
+	if(selectedBone != undefined) {selectedBone.renderHighLighted = false}
+	}
+	
+function boneviewer_update_bonelist() {
+	if(selectedArmature != undefined) {
+		array_resize(boneViewerList,0)
+		for(var i = 0; i < array_length(selectedArmature.allBones); i++) {
+			var bone = selectedArmature.allBones[i]
+			boneViewerList[i] = string("{0}: {1}",bone.boneid,bone.name);
+			}
+		}
+	}
+	
+function boneviewer_select_bone(index) {
+	selectedBoneIndex = index
+	if(array_length(boneViewerList) > 0) {
+		if(selectedBone != undefined) {selectedBone.renderHighLighted = false}
+		selectedBone = selectedArmature.allBones[selectedBoneIndex]
+		selectedBone.renderHighLighted = true;
 		
+		array_resize(selectedBonePairings, 0)
+		for(var i = 0; i < array_length(selectedArmature.meshBindings); i++) {
+			var pair = selectedArmature.meshBindings[i];
+			show_debug_message("{0} - {1}",pair.bone.boneid,pair.meshname)
+			if(pair.bone.boneid == selectedBone.boneid) {
+				array_push(selectedBonePairings, pair)
+				show_debug_message("match")
+				}
+			}
+		}
+	else {
+		selectedBone = undefined;
+		array_resize(selectedBonePairings, 0)
+		}
+	}
+	
+	
+#endregion
+	
 #endregion
 
 
@@ -325,6 +381,7 @@ dev_register_command("tb_toggle_devtools", function(args) {
 	debug_log("devtools " + (global.showDevTools ? "enabled" : "disabled"))
 	}, 0, "toggles the devtools", "");
 	
+
 
 
 

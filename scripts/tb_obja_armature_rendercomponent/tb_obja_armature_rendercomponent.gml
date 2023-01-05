@@ -34,6 +34,10 @@ function OBJA_ArmatureRenderComponent(_p, _arm) : RenderComponent(_p,false,false
 			
 			matrix_set(matrix_world,finalmat);
 			model.submit(pr_trianglelist, model.texture)
+			if(pair.bone.renderHighLighted) {
+				model.submit(pr_linelist, sprite_get_texture(texRed,0))
+				}
+			
 			//vertex_submit(model.vertexBuffer,pr_trianglelist,model.texture);
 			}
 			
