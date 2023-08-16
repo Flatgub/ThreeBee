@@ -1,5 +1,5 @@
 instance_create_depth(0, 0, -9999, imgui);
-imguigml_add_font_from_ttf("pixel04b24.ttf", 12.0);
+//imguigml_add_font_from_ttf("pixel04b24.ttf", 12.0);
 
 #macro DEVTOOLS_DEVCAMERA_VIEWID 7
 #macro DEVTOOLS_DEVCAMERA_RENDERLAYER 256
@@ -11,6 +11,8 @@ showModelViewer = false;
 showArmatureViewer = false;
 
 devToolsCameraPanelIsHovered = false;
+
+customMenuTabs = []
 
 #region [ SHARED ]
 devToolsCameraSize = 500; //width and height of the dev tools camera

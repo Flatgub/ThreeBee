@@ -34,3 +34,14 @@ dev_register_command("tb_toggle_postfx", function(args) {
 	tb_set_postfx(!global.USE_POSTFX)
 	debug_log("postfx " + (global.USE_POSTFX ? "enabled" : "disabled"))
 	}, 0, "toggles the postfx pass", "");
+	
+dev_register_command("tb_guiscale", 
+	function (args) {
+		try {
+			tb_scale_gui_layer(real(args[0]))
+			}
+		catch (e) {
+			debug_log("argument must be 1 or 0!",CONSOLE_ERROR_COL);
+			show_debug_message("caught :" + string(e));
+			}
+		},1, "enables freecam", "[bool]")

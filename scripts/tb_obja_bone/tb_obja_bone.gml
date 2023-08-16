@@ -24,8 +24,9 @@ function OBJA_Bone(_id, _name, _armature, _head, _axis, _angle, _length) constru
 		vertex_submit(global.__BONE_BOX_MESH,pr_linelist,tex);
 		
 		var mat = matrix_multiply(__headScaleMatrix,_matrix)
+		var arrowmesh = renderHighLighted ? global.__BONE_ARROW_MESH_WHITE : global.__BONE_ARROW_MESH;
 		matrix_set(matrix_world,mat);
-		vertex_submit(global.__BONE_ARROW_MESH,pr_linelist,-1);
+		vertex_submit(arrowmesh,pr_linelist,tex);
 		});
 		
 	static clone = function() {

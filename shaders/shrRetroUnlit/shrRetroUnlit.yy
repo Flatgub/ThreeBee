@@ -1,11 +1,10 @@
 {
-  "type": 1,
+  "resourceType": "GMShader",
+  "resourceVersion": "1.0",
+  "name": "shrRetroUnlit",
   "parent": {
     "name": "Unlit",
     "path": "folders/ThreeBee/Shaders/Retro/Unlit.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "shrRetroUnlit",
-  "tags": [],
-  "resourceType": "GMShader",
+  "type": 1,
 }

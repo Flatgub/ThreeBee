@@ -24,6 +24,7 @@ numOfLights = 0;
 activeLightPositions = [];
 activeLightColours = [];
 activeLightStrengths = [];
+activeLightRadiusModifiers = [];
 lightingEnabled = false;
 
 cameraShader = undefined; ///@is {TBShader?}

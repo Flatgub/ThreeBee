@@ -5,6 +5,7 @@ ds_list_add(global.ALL_LIGHTS,self); //add self to known lights
 z = 0;
 light_colour = 0;
 light_strength = 0;
+light_radius_multiplier = 1;
 enabled = true;
 
 if(DEBUG_SHOW_LIGHTS) {

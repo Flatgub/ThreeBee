@@ -41,6 +41,8 @@ function tb_resize_window(_width,_height,_scale) {
 	global.SCREEN_CENTER_Y = global.WINDOW_HEIGHT/2;
 		
 	display_set_gui_size(windowwidth, windowheight)
+	global.GUI_WIDTH = windowwidth;
+	global.GUI_HEIGHT = windowheight;	
 	
 	oScreenManager.recenterRequired = 10;
 	oScreenManager.postFXPanel.resize(global.VIEWPORT_WIDTH, global.VIEWPORT_HEIGHT)
@@ -55,5 +57,20 @@ function tb_set_postfx(_enabled, _shader) {
 	application_surface_draw_enable(!_enabled)
 	if(_enabled) {
 		if(_shader != undefined) {global.POSTFX_SHADER = _shader}
+		}
+	}
+	
+
+/// @function tb_scale_gui_layer(enabled)
+function tb_scale_gui_layer(_enabled) {
+	if(_enabled) {
+		display_set_gui_size(global.VIEWPORT_WIDTH, global.VIEWPORT_HEIGHT)
+		global.GUI_WIDTH = global.VIEWPORT_WIDTH;
+		global.GUI_HEIGHT = global.VIEWPORT_HEIGHT;	
+		}
+	else {
+		display_set_gui_size(global.WINDOW_WIDTH, global.WINDOW_HEIGHT)
+		global.GUI_WIDTH = global.WINDOW_WIDTH;
+		global.GUI_HEIGHT = global.WINDOW_HEIGHT;	
 		}
 	}

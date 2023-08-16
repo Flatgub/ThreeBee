@@ -4,11 +4,11 @@ z = 16;
 x = 0;
 y = 0;
 
-horizontalAcceleration = 0.2;
-maxHorizontalSpeed = 1;
+horizontalAcceleration = 0.5;
+maxHorizontalSpeed = 2;
 
-verticalAcceleration = 0.05;
-maxVerticalSpeed = 1;
+verticalAcceleration = 0.5;
+maxVerticalSpeed = 2;
 
 movementFreedom = true;
 
@@ -21,7 +21,7 @@ subZ = 0;
 
 mouseLock = false;
 
-thisCamera = define_camera_perspective(0,global.WINDOW_WIDTH,global.WINDOW_HEIGHT,58,0.1,320,true,new RetroShader_Lit());
+thisCamera = define_camera_perspective(1,global.WINDOW_WIDTH,global.WINDOW_HEIGHT,58,0.1,4096,true,new RetroShader_Lit());
 audio_listener_bind_to_camera(thisCamera)
 
 thisCamera.lightingEnabled = true;

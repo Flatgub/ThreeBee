@@ -35,6 +35,17 @@ if(global.showDevTools && imguigml_ready()) {
 			imguigml_end_menu()
 			}
 		
+		//RENDERING
+		if(imguigml_begin_menu("Rendering")) {
+			if(imguigml_menu_item("Backface Culling","",global.__BACKFACE_CULLING_ENABLED)) {
+				global.__BACKFACE_CULLING_ENABLED = !global.__BACKFACE_CULLING_ENABLED;
+				}
+			
+			imguigml_end_menu()
+			}
+		
+		imguigml_separator()
+		
 		imguigml_end_main_menu_bar()
 		}
 		

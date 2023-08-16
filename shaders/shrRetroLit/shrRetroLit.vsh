@@ -21,6 +21,7 @@ uniform float u_fGeoResolution;
 uniform vec3 u_vLightPosition[NUM_LIGHTS];
 uniform vec3 u_vLightColour[NUM_LIGHTS];
 uniform float u_fLightStrength[NUM_LIGHTS];
+uniform float u_fLightRadiusMultiplier[NUM_LIGHTS];
 uniform float u_fLightMix;
 
 
@@ -66,7 +67,9 @@ void main()
 		vec3 l = normalize(eyespaceLightDir);
 		float cosTheta = max(dot(n,l),0.0);
 		
-		totalLightCol += lightCol * u_fLightStrength[i] * cosTheta / (dist*dist);
+		float radius = sqrt(1.0 / 0.00008) * u_fLightRadiusMultiplier[i];
+		float att = clamp(1.0 - dist/radius, 0.0, 1.0);  
+		totalLightCol += lightCol * (u_fLightStrength[i] * cosTheta) * att;
 		}
 	
 	vec3 colour = u_vAmbientLightColour + (in_Colour.rgb * totalLightCol);

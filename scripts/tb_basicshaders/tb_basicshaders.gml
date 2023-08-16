@@ -13,15 +13,19 @@ function BasicShader() : TBShader() constructor {
 	fogColourUniform = shader_get_uniform(shrBasic,"u_vFogColour")
 	ditherMatrixUniform = shader_get_uniform(shrBasic,"u_fDitherMatrix");
 	blendUniform = shader_get_uniform(shrBasic,"u_vBlend");
+	
+	fogStart = 200;
+	fogEnd = 400;
+	fogColour = [0,0,0];
 		
 	hasPerComponentUniforms = true;
 	
 	shader_use = function() {	
 		shader_set(shrBasic);
-		shader_set_uniform_f(fogStartUniform,global.FOG_START);
-		shader_set_uniform_f(fogEndUniform,global.FOG_END);
+		shader_set_uniform_f(fogStartUniform,fogStart);
+		shader_set_uniform_f(fogEndUniform,fogEnd);
 		shader_set_uniform_f(blendUniform, 1, 1, 1, 1);
-		shader_set_uniform_f_array(fogColourUniform,global.FOG_COLOUR);
+		shader_set_uniform_f_array(fogColourUniform,fogColour);
 		shader_set_uniform_f_array(ditherMatrixUniform, global.__DITHER_MATRIX);
 		}
 	

@@ -1,11 +1,10 @@
 {
-  "type": 1,
+  "resourceType": "GMShader",
+  "resourceVersion": "1.0",
+  "name": "shrBasicBillboard",
   "parent": {
     "name": "Basic",
     "path": "folders/ThreeBee/Shaders/Basic.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "shrBasicBillboard",
-  "tags": [],
-  "resourceType": "GMShader",
+  "type": 1,
 }

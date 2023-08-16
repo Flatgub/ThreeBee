@@ -25,6 +25,7 @@ global.DYNAMIC_RENDER_REQUESTS = ds_list_create(); //things that need the world 
 depthlist = ds_list_create();
 
 global.DEFAULT_BASIC_SHADER = new BasicShader();
+global.__BACKFACE_CULLING_ENABLED = true;
 
 // ### CAMERAS ###
 
@@ -62,7 +63,7 @@ global.LOADED_ARMATURES = ds_map_create();
 global.DEFAULT_TEXTURE = sprite_get_texture(texMissing,0);
 global.DEFAULT_MATRIX = matrix_build_identity();
 
-defaultmodel = model_load_obj("suzanne.obj")
+defaultmodel = model_load_obj("models/suzanne.obj")
 defaultmodel.freeze();
 
 global.DEFAULT_MODEL = defaultmodel;
@@ -93,8 +94,18 @@ define_line(vb,[0,arrowlen,0],[0   ,arrowlen-(arrowlen*arrowoff),-arrowoff],c_aq
 define_line(vb,[0,arrowlen,0],[0   ,arrowlen-(arrowlen*arrowoff), arrowoff],c_aqua,1)
 vertex_end(vb)
 vertex_freeze(vb)
-#endregion
 
+var vb = vertex_create_buffer()
+global.__BONE_ARROW_MESH_WHITE = vb;
+vertex_begin(vb,global.VERTEX_FORMAT)
+define_line(vb,[0,0,0],[0,arrowlen,0],c_white,1)
+define_line(vb,[0,arrowlen,0],[-arrowoff,arrowlen-(arrowlen*arrowoff),0],c_white,1)
+define_line(vb,[0,arrowlen,0],[ arrowoff,arrowlen-(arrowlen*arrowoff),0],c_white,1)
+define_line(vb,[0,arrowlen,0],[0   ,arrowlen-(arrowlen*arrowoff),-arrowoff],c_white,1)
+define_line(vb,[0,arrowlen,0],[0   ,arrowlen-(arrowlen*arrowoff), arrowoff],c_white,1)
+vertex_end(vb)
+vertex_freeze(vb)
+#endregion
 		
 /// ### MISC STUFF ###
 global.MOUSE_VECTOR = [0,0,0];
@@ -102,3 +113,14 @@ global.MOUSE_VECTOR = [0,0,0];
 global.swaps = 0;
 
 pulse = 0;
+
+dev_register_command("tb_backface_culling", 
+	function (args) {
+		try {
+			global.__BACKFACE_CULLING_ENABLED = real(args[0]);
+			}
+		catch (e) {
+			debug_log("argument must be 1 or 0!",CONSOLE_ERROR_COL);
+			show_debug_message("caught :" + string(e));
+			}
+		},1, "enable or disable backface culling", "[bool]")

@@ -37,3 +37,27 @@ function quat_normalize(quat) {
 	quat[@ 2] *= l
 	quat[@ 3] *= l
 	}
+	
+function quat_to_euler(Q) {
+	//adapted from wikipedia (https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles)
+	var out = []
+	
+	// roll (x-axis rotation)
+    var sinr_cosp = 2 * (Q[QUAT_W] * Q[QUAT_X] + Q[QUAT_Y] * Q[QUAT_Z]);
+    var cosr_cosp = 1 - 2 * (Q[QUAT_X] * Q[QUAT_X] + Q[QUAT_Y] * Q[QUAT_Y]);
+    out[0] = arctan2(sinr_cosp, cosr_cosp);
+	
+	
+	// pitch (y-axis rotation)
+    var sinp = sqrt(1 + 2 * (Q[QUAT_W] * Q[QUAT_Y] - Q[QUAT_X] * Q[QUAT_Z]));
+    var cosp = sqrt(1 - 2 * (Q[QUAT_W] * Q[QUAT_Y] - Q[QUAT_X] * Q[QUAT_Z]));
+
+    out[1] = 2 * arctan2(sinp, cosp) - pi / 2;
+	
+	// yaw (z-axis rotation)
+    var siny_cosp = 2 * (Q[QUAT_W] * Q[QUAT_Z] + Q[QUAT_X] * Q[QUAT_Y]);
+    var cosy_cosp = 1 - 2 * (Q[QUAT_Y] * Q[QUAT_Y] + Q[QUAT_Z] * Q[QUAT_Z]);
+    out[2] = arctan2(siny_cosp, cosy_cosp);
+	
+	return out;
+	}

@@ -135,7 +135,7 @@ class OBJA_Export(bpy.types.Operator):
             vertbone = vert.groups[0].group
             
             #find the bone and the attached mesh relative to the armature
-            bone = knownBones[vertbone]
+			bone = knownBones[vertgroups[vertbone].name]
             objLocalToArmature = obj.matrix_local
             boneLocalToArmature = bone.matrix_local
             
@@ -147,7 +147,7 @@ class OBJA_Export(bpy.types.Operator):
             trans, quat, s = boneToMesh.decompose()
             rotaxis, rotangle = quat.to_axis_angle()
                 
-            out.write("mp %s %s %s %s %s\n" % (obj.name, vertbone, vec3_to_string(trans), vec3_to_string(rotaxis), float_to_string(rotangle)))
+            out.write("mp %s %s %s %s %s\n" % (obj.name, boneIDs[bone.name], vec3_to_string(trans), vec3_to_string(rotaxis), float_to_string(rotangle)))
             
         if(arm.animation_data is not None):                
             # animation block

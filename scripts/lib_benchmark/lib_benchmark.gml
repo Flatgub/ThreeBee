@@ -5,12 +5,14 @@ function benchmark_start(_name) {
 
 
 /// @function benchmark_end(benchmark);
+/// @description returns a string for the end of the benchmark
 function benchmark_end(_benchmark) {
 	var result = benchmark_result(_benchmark)
 	return string("{0} took {1}",_benchmark.name,result);
 }
 
 /// @function benchmark_result(benchmark)
+/// @description returns the current time since the start of the benchmark
 function benchmark_result(_benchmark) {
 	var sTime = _benchmark.start;
 	var eTime = get_timer();	

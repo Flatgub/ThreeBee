@@ -39,10 +39,10 @@ function audio_listener_bind_to_camera(camera) {
 /// @param sound
 /// @param loops
 /// @param priority
-function audio_source_play(source, sound, loops, priority) {
+function audio_source_play(source, sound, loops, priority, gain = 1, offset = 0, pitch = 1) {
 	if !instance_exists(source) {printf("audio_source_play failed: audio source {0} doesn't exist",source);return -1;}
 
-	return audio_play_sound_on(source.emitter,sound,loops,priority);
+	return audio_play_sound_on(source.emitter,sound,loops,priority, gain, offset,  pitch);
 
 }
 

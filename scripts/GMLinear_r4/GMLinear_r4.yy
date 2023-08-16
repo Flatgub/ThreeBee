@@ -1,12 +1,11 @@
 {
-  "isDnD": false,
+  "resourceType": "GMScript",
+  "resourceVersion": "1.0",
+  "name": "GMLinear_r4",
   "isCompatibility": false,
+  "isDnD": false,
   "parent": {
     "name": "GMLinear",
     "path": "folders/Libraries/GMLinear.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "GMLinear_r4",
-  "tags": [],
-  "resourceType": "GMScript",
 }

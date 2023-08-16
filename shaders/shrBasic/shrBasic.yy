@@ -1,11 +1,10 @@
 {
-  "type": 1,
+  "resourceType": "GMShader",
+  "resourceVersion": "1.0",
+  "name": "shrBasic",
   "parent": {
     "name": "Basic",
     "path": "folders/ThreeBee/Shaders/Basic.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "shrBasic",
-  "tags": [],
-  "resourceType": "GMShader",
+  "type": 1,
 }

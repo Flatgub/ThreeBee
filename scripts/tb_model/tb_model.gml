@@ -38,14 +38,18 @@ function Model() constructor {
 		}
 	
 	/// @function submit(mode, fallback)
-	/// @param	{Constant.PrimitiveType}	mode		render mode
-	/// @param	{Pointer.Texture}			[fallback]	the texture to use instead of the model's base texture for any mesh groups which dont have a texture assigned
-	function submit(mode, fallback_tex) {
+	/// @param	{Constant.PrimitiveType}	mode				render mode
+	/// @param	{Pointer.Texture}			[fallback]			the texture to use instead of the model's base texture for any mesh groups which dont have a texture assigned
+	/// @param	{Bool}						[force_fallback]	whether to force the mesh to use the fallback texture
+	function submit(mode, fallback_tex, force_fallback = false) {
 		fallback_tex ??= texture;
 		var groups = mesh_groups;
 		for(var i = 0; i < array_length(groups); i++) {
 			var group = groups[i];
-			vertex_submit(group.vertexBuffer, mode, group.texture ?? fallback_tex);
+			var tex;
+			if(force_fallback) {tex = fallback_tex}
+			else {tex = group.texture ?? fallback_tex}
+			vertex_submit(group.vertexBuffer, mode, tex);
 			}
 		}
 		
@@ -66,6 +70,7 @@ function _MeshGroup() constructor {
 	texturename = "";
 	texture = undefined;		//undefined means use the base texture
 	vertexBuffer = undefined;
+	rawBuffer = undefined;
 	frozen = false;
 	
 	/// @function bind_texture(name)
@@ -103,17 +108,19 @@ function _MeshGroup() constructor {
 	/// @function cleanup()
 	function cleanup() {
 		if(vertexBuffer != undefined) {vertex_delete_buffer(vertexBuffer)}
+		if(rawBuffer != undefined) {buffer_delete(rawBuffer)}
 		}
 	}
 #endregion
 
 #region [ Loading Models ]
-/// @function model_load_obj(path, [name], [freeze_on_load=false])
+/// @function model_load_obj(path, [name], [freeze_on_load=false], [preserve_buffer])
 /// @param {string} path				the path of the file
 /// @param {string} [name]				the custom name to give the model
 /// @param {bool}	[freeze_on_load]	whether to immediately freeze the meshes
+/// @param {bool}	[preserve_buffer]	whether to keep the raw model buffer instead of deleteing it
 /// @returns	{Struct.Model | Array<Struct.Model>}
-function model_load_obj(path, name, freeze_on_load=false) {
+function model_load_obj(path, name, freeze_on_load=false, preserve_buffer=false) {
 	name = name ?? path;
 
 	var objects = ds_list_create();
@@ -315,6 +322,8 @@ function model_load_obj(path, name, freeze_on_load=false) {
 			
 			submesh.vertexBuffer = vertex_create_buffer_from_buffer(modelBuffer, global.VERTEX_FORMAT)
 			if(freeze_on_load) {submesh.freeze()}
+			if(preserve_buffer) {submesh.rawBuffer = modelBuffer;} else {buffer_delete(modelBuffer);}
+			
 			multimesh.add_meshgroup(submesh);
 			buffer_delete(modelBuffer);
 			}

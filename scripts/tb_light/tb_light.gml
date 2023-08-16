@@ -62,6 +62,7 @@ function calculate_active_lights(camera) {
 			largeStep+=3;
 		
 			camera.activeLightStrengths[i] = light.light_strength;
+			camera.activeLightRadiusModifiers[i] = light.light_radius_multiplier;
 			camera.numOfLights++;
 			}	
 		else { //pad the array with empty lights if there's less than 8
@@ -73,6 +74,7 @@ function calculate_active_lights(camera) {
 			camera.activeLightColours[largeStep+2] = 0;
 			largeStep+=3;
 			camera.activeLightStrengths[i] = 0;
+			camera.activeLightRadiusModifiers[i] = 0;
 			}
 		}
 	

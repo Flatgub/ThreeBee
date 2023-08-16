@@ -7,7 +7,10 @@ function RetroShader_Lit() : TBShader() constructor {
 	lightPosUniform = shader_get_uniform(shader,"u_vLightPosition");
 	lightColourUniform = shader_get_uniform(shader,"u_vLightColour");
 	lightStrengthUniform =  shader_get_uniform(shader,"u_fLightStrength");
+	lightRadiusMultiplierUniform =  shader_get_uniform(shader,"u_fLightRadiusMultiplier");
 	lightMixUniform =  shader_get_uniform(shader,"u_fLightMix");
+
+	desaturation = 0;
 	
 	// FOG
 	litFogStartUniform = shader_get_uniform(shader,"u_fFogStart");
@@ -40,6 +43,7 @@ function RetroShader_Lit() : TBShader() constructor {
 		shader_set_uniform_f_array(lightPosUniform,global.CURRENT_CAMERA.activeLightPositions);
 		shader_set_uniform_f_array(lightColourUniform,global.CURRENT_CAMERA.activeLightColours);
 		shader_set_uniform_f_array(lightStrengthUniform,global.CURRENT_CAMERA.activeLightStrengths);
+		shader_set_uniform_f_array(lightRadiusMultiplierUniform,global.CURRENT_CAMERA.activeLightRadiusModifiers);
 		
 		//FOG
 		shader_set_uniform_f(litFogStartUniform,fogStart);

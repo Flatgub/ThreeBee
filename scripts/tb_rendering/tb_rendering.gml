@@ -34,7 +34,7 @@ function render_scene() {
 	var cameraShader = global.CURRENT_CAMERA.cameraShader;
 	if(cameraShader != undefined) {cameraShader.shader_use();}
 
-	gpu_set_cullmode(CULL_DIRECTION)
+	if(global.__BACKFACE_CULLING_ENABLED) {gpu_set_cullmode(CULL_DIRECTION)}
 	gpu_set_zwriteenable(true)
 	gpu_set_ztestenable(true)
 

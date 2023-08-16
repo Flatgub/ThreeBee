@@ -1,11 +1,10 @@
 {
-  "type": 1,
+  "resourceType": "GMShader",
+  "resourceVersion": "1.0",
+  "name": "shrRetroPostFX",
   "parent": {
     "name": "PostFX",
     "path": "folders/ThreeBee/Shaders/Retro/PostFX.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "shrRetroPostFX",
-  "tags": [],
-  "resourceType": "GMShader",
+  "type": 1,
 }

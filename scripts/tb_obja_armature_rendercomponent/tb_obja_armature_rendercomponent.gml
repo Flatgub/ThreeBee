@@ -1,3 +1,5 @@
+global.__ARMATURE_RENDERER_SHOW_HIGHLIGHTED_BONE = false;
+
 /// @function OBJA_ArmatureRenderComponent(parent, armature_instance)
 function OBJA_ArmatureRenderComponent(_p, _arm) : RenderComponent(_p,false,false) constructor {
 	armature = _arm
@@ -33,9 +35,12 @@ function OBJA_ArmatureRenderComponent(_p, _arm) : RenderComponent(_p,false,false
 			finalmat = matrix_multiply(dq_to_matrix(finaldq), renderMatrix)
 			
 			matrix_set(matrix_world,finalmat);
-			model.submit(pr_trianglelist, model.texture)
-			if(pair.bone.renderHighLighted) {
-				model.submit(pr_linelist, sprite_get_texture(texRed,0))
+			
+			if(pair.bone.renderHighLighted && global.__ARMATURE_RENDERER_SHOW_HIGHLIGHTED_BONE) {
+				model.submit(pr_trianglelist, sprite_get_texture(texRed,0), true)
+				}
+			else {
+				model.submit(pr_trianglelist, model.texture)
 				}
 			
 			//vertex_submit(model.vertexBuffer,pr_trianglelist,model.texture);

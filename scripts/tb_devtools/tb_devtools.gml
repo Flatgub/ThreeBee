@@ -395,7 +395,10 @@ function __tb_devtools_imgui_armatureviewer_boneviewer() {
 				imguigml_text_disabled("This bone has no attached meshes")
 				}
 			
-			
+			var ret = imguigml_checkbox("highlight meshes",global.__ARMATURE_RENDERER_SHOW_HIGHLIGHTED_BONE)
+			if(ret[0]) {
+				global.__ARMATURE_RENDERER_SHOW_HIGHLIGHTED_BONE = ret[1];
+				}
 							
 			
 			if(_boneViewerWindow[1] == false) {
