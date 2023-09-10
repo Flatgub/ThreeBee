@@ -12,6 +12,9 @@ showArmatureViewer = false;
 
 devToolsCameraPanelIsHovered = false;
 
+modelImportSettings = new TBMeshImportSettings();
+modelImportSettings.freeze_on_load = true;
+
 customMenuTabs = []
 
 #region [ SHARED ]

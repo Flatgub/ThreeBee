@@ -68,7 +68,7 @@ function render_scene() {
 			if(currentShader.hasPerComponentUniforms) {currentShader.update_uniforms(rendComp);}
 			}
 			
-		//use a custom render functioo if necesary
+		//use a custom render function if necesary
 		if(rendComp.customRenderFunction == undefined) {
 			vertex_submit(rendComp.renderBuffer,rendComp.renderMode,rendComp.renderTexture);
 			}

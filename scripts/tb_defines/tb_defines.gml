@@ -1,3 +1,7 @@
+// SEE TBMeshImportSettings FOR DETAILS
+#macro TB_OBJ_LOAD_DEFAULT_FREEZE_ON_LOAD false
+#macro TB_OBJ_LOAD_DEFAULT_PRESERVE_BUFFER false
+
 enum TB_CameraModes {
 	Perspective,
 	Orthographic

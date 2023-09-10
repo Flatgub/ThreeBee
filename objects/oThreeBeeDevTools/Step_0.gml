@@ -6,7 +6,11 @@ if(global.showDevTools && imguigml_ready()) {
 		if(imguigml_begin_menu("File")) {
 			if(imguigml_menu_item("Import Model")) {
 				var file = get_open_filename("*.obj","");
-				if(file != "") {model_load_obj(file, undefined, true)}
+				if(file != "") {
+					var bench = benchmark_start("loading model")
+					model_load_obj(file, undefined, modelImportSettings)
+					show_debug_message(benchmark_end(bench))
+					}
 				}
 				
 			if(imguigml_menu_item("Import Armature")) {
